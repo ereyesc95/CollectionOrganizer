@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException
-from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 
 from app.covers import find_cover_path, get_covers_folder
+from app.media_response import cached_media_file
 from app.database import get_db
 from app.models import Record
 
@@ -18,4 +18,4 @@ def serve_cover(record_id: int, db: Session = Depends(get_db)):
     path = find_cover_path(folder, record.cover_key)
     if not path:
         raise HTTPException(404, "Cover not found")
-    return FileResponse(path)
+    return cached_media_file(path)

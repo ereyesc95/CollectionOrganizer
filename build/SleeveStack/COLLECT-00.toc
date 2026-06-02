@@ -2688,13 +2688,13 @@
   ('click-8.3.2.dist-info\\licenses\\LICENSE.txt',
    'C:\\Python314\\Lib\\site-packages\\click-8.3.2.dist-info\\licenses\\LICENSE.txt',
    'DATA'),
-  ('frontend\\dist\\assets\\index-DrxIaPFh.js',
+  ('frontend\\dist\\assets\\index-BxvebwOG.css',
    'C:\\Users\\reyedu01\\AI Projects\\Collection '
-   'Organizer\\frontend\\dist\\assets\\index-DrxIaPFh.js',
+   'Organizer\\frontend\\dist\\assets\\index-BxvebwOG.css',
    'DATA'),
-  ('frontend\\dist\\assets\\index-DtBJie-H.css',
+  ('frontend\\dist\\assets\\index-SgkbBydy.js',
    'C:\\Users\\reyedu01\\AI Projects\\Collection '
-   'Organizer\\frontend\\dist\\assets\\index-DtBJie-H.css',
+   'Organizer\\frontend\\dist\\assets\\index-SgkbBydy.js',
    'DATA'),
   ('frontend\\dist\\index.html',
    'C:\\Users\\reyedu01\\AI Projects\\Collection '

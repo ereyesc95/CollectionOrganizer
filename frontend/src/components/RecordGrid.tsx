@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from "react";
+import { memo, useEffect, useMemo, useRef, useState } from "react";
 import { browseAutographFile } from "../api";
 import type { Record } from "../types";
 import AutographStarIcon from "./AutographStarIcon";
@@ -20,7 +20,7 @@ interface Props {
   onToast?: (msg: string, type: "success" | "error") => void;
 }
 
-function Card({
+const Card = memo(function Card({
   record: r,
   siblings,
   onEditionPick,
@@ -36,6 +36,7 @@ function Card({
   onToast?: (msg: string, type: "success" | "error") => void;
 }) {
   const [hover, setHover] = useState(false);
+  const [showVideo, setShowVideo] = useState(false);
   const [editionOpen, setEditionOpen] = useState(false);
   const [autographOpen, setAutographOpen] = useState(false);
   const [autographAnchor, setAutographAnchor] = useState<DOMRect | null>(null);
@@ -47,25 +48,35 @@ function Card({
   const hasEditionChoice = siblings.length > 1;
   const isSigned = r.autograph_tags.length > 0;
 
-  const onEnter = () => {
-    setHover(true);
+  useEffect(() => {
+    setShowVideo(false);
+    setHover(false);
+  }, [r.id]);
+
+  useEffect(() => {
+    if (!showVideo) return;
     const v = videoRef.current;
-    if (v && r.has_animation_file) {
+    if (!v) return;
+    const play = () => {
       v.currentTime = 0;
       v.play().catch(() => {});
-    }
+    };
+    if (v.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) play();
+    else v.addEventListener("loadeddata", play, { once: true });
+    return () => v.removeEventListener("loadeddata", play);
+  }, [showVideo, r.animation_url]);
+
+  const onEnter = () => {
+    setHover(true);
+    if (r.has_animation_file && r.animation_url) setShowVideo(true);
   };
 
   const onLeave = () => {
     setHover(false);
+    setShowVideo(false);
     setEditionOpen(false);
     setAutographOpen(false);
     setAutographAnchor(null);
-    const v = videoRef.current;
-    if (v) {
-      v.pause();
-      v.currentTime = 0;
-    }
   };
 
   const label = editionLabel(r);
@@ -132,19 +143,21 @@ function Card({
             src={r.cover_url}
             alt={r.title}
             loading="lazy"
-            className={hover && r.has_animation_file ? "hidden" : ""}
+            decoding="async"
+            className={showVideo ? "hidden" : ""}
           />
         ) : (
           !r.has_animation_file && <span className="placeholder">♪</span>
         )}
-        {r.has_animation_file && r.animation_url && (
+        {showVideo && r.animation_url && (
           <video
             ref={videoRef}
             src={r.animation_url}
             muted
             loop
             playsInline
-            className={hover ? "visible" : ""}
+            preload="none"
+            className="visible"
           />
         )}
         <AutographPreviewBubble
@@ -227,7 +240,7 @@ function Card({
       )}
     </article>
   );
-}
+});
 
 export default function RecordGrid({ records, onSelect, onRefresh, onToast }: Props) {
   const byAlbum = useMemo(() => {

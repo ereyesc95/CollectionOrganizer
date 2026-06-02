@@ -447,6 +447,10 @@
    'C:\\Users\\reyedu01\\AI Projects\\Collection '
    'Organizer\\backend\\app\\main.py',
    'PYMODULE'),
+  ('app.media_response',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\backend\\app\\media_response.py',
+   'PYMODULE'),
   ('app.models',
    'C:\\Users\\reyedu01\\AI Projects\\Collection '
    'Organizer\\backend\\app\\models.py',
