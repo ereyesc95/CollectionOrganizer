@@ -1,0 +1,18 @@
+SleeveStack on your phone (same Wi-Fi)
+======================================
+
+SleeveStack is a web app that runs on your PC. There is no Android APK —
+use your phone's browser (Chrome, Samsung Internet, etc.) instead.
+
+1. Start SleeveStack.exe on your Windows PC.
+2. Connect your phone to the SAME Wi-Fi network as the PC.
+3. On your phone, open the URL shown in data\phone-access.txt
+   (created when the app starts), for example:
+   http://192.168.1.42:8765/
+
+If the page does not load:
+- Allow SleeveStack through Windows Firewall when prompted.
+- Check that the port in the URL matches (8765, 8766, …).
+- Some public/guest Wi-Fi networks block device-to-device traffic.
+
+Note: Folder pickers and Excel import only work on the PC, not on the phone.

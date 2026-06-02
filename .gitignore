@@ -1,6 +1,5 @@
-# Local data and uploads
-data/
-*.db
+# Uploaded autograph photos (use autographs folder setting or uploads here)
+data/autographs/
 
 # User media libraries (configured via app settings)
 Covers/
@@ -18,13 +17,9 @@ venv/
 *.egg-info/
 .pytest_cache/
 
-# Node / frontend build
+# Node / frontend build (dev); packaged UI is in dist/SleeveStack
 node_modules/
 frontend/dist/
-
-# PyInstaller
-build/
-dist/
 
 # OS / IDE
 .DS_Store
