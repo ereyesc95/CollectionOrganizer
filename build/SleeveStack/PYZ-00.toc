@@ -435,6 +435,10 @@
    'C:\\Users\\reyedu01\\AI Projects\\Collection '
    'Organizer\\backend\\app\\folder_dialog.py',
    'PYMODULE'),
+  ('app.frontend_static',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\backend\\app\\frontend_static.py',
+   'PYMODULE'),
   ('app.import_excel',
    'C:\\Users\\reyedu01\\AI Projects\\Collection '
    'Organizer\\backend\\app\\import_excel.py',
@@ -861,9 +865,6 @@
    'PYMODULE'),
   ('fastapi.sse',
    'C:\\Python314\\Lib\\site-packages\\fastapi\\sse.py',
-   'PYMODULE'),
-  ('fastapi.staticfiles',
-   'C:\\Python314\\Lib\\site-packages\\fastapi\\staticfiles.py',
    'PYMODULE'),
   ('fastapi.types',
    'C:\\Python314\\Lib\\site-packages\\fastapi\\types.py',

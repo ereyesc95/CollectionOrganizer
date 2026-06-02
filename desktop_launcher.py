@@ -82,14 +82,26 @@ def write_phone_access_hint(port: int) -> None:
 
 
 def open_browser(port: int) -> None:
-    time.sleep(1.2)
+    time.sleep(2.0)
     webbrowser.open(f"http://127.0.0.1:{port}/")
 
 
 def main() -> None:
+    from app.paths import resolve_frontend_dist
+
     port = find_free_port()
     first_run_import()
     write_phone_access_hint(port)
+
+    if not resolve_frontend_dist():
+        from app.paths import DATA_DIR, ensure_data_dir
+
+        ensure_data_dir()
+        (DATA_DIR / "startup-error.txt").write_text(
+            "SleeveStack could not find the built UI (frontend/dist).\n"
+            "Re-run build.ps1 or reinstall from a complete dist\\SleeveStack folder.\n",
+            encoding="utf-8",
+        )
 
     threading.Thread(target=open_browser, args=(port,), daemon=True).start()
 

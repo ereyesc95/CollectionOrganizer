@@ -26,7 +26,30 @@ def bundle_dir() -> Path:
 PROJECT_ROOT = install_dir()
 BUNDLE_ROOT = bundle_dir()
 DATA_DIR = PROJECT_ROOT / "data"
-FRONTEND_DIST = BUNDLE_ROOT / "frontend" / "dist"
+
+
+def resolve_frontend_dist() -> Path | None:
+    """Find built UI (bundled _internal, or copied next to the exe)."""
+    candidates = [
+        BUNDLE_ROOT / "frontend" / "dist",
+        PROJECT_ROOT / "frontend" / "dist",
+        PROJECT_ROOT / "_internal" / "frontend" / "dist",
+    ]
+    seen: set[str] = set()
+    for path in candidates:
+        key = str(path.resolve())
+        if key in seen:
+            continue
+        seen.add(key)
+        if not (path / "index.html").is_file():
+            continue
+        assets = path / "assets"
+        if assets.is_dir() and any(assets.iterdir()):
+            return path
+    return None
+
+
+FRONTEND_DIST = resolve_frontend_dist() or (BUNDLE_ROOT / "frontend" / "dist")
 
 
 def ensure_data_dir() -> None:

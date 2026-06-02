@@ -48,6 +48,11 @@ if (Test-Path "$Root\assets\PHONE_ACCESS.txt") {
     Copy-Item "$Root\assets\PHONE_ACCESS.txt" "$outDir\PHONE_ACCESS.txt" -Force
 }
 
+# Copy UI next to exe (backup if _internal path differs on some machines)
+$feOut = "$outDir\frontend\dist"
+New-Item -ItemType Directory -Force -Path $feOut | Out-Null
+Copy-Item -Path "$Root\frontend\dist\*" -Destination $feOut -Recurse -Force
+
 Write-Host "`n[4/5] Creating ZIP portable package..." -ForegroundColor Yellow
 $zipPath = "$Root\dist\SleeveStack-portable.zip"
 if (Test-Path $zipPath) { Remove-Item $zipPath -Force }
