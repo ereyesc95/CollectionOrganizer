@@ -1,0 +1,35 @@
+# Local data and uploads
+data/
+*.db
+
+# User media libraries (configured via app settings)
+Covers/
+Animations/
+Autographs/
+covers/
+animations/
+autographs/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+
+# Node / frontend build
+node_modules/
+frontend/dist/
+
+# PyInstaller
+build/
+dist/
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.log
+~$*
