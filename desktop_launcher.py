@@ -96,7 +96,15 @@ def main() -> None:
     import uvicorn
     from app.main import app
 
-    uvicorn.run(app, host="0.0.0.0", port=port, log_level="warning")
+    # log_config=None avoids uvicorn's default logging setup, which breaks under PyInstaller
+    uvicorn.run(
+        app,
+        host="0.0.0.0",
+        port=port,
+        log_level="warning",
+        log_config=None,
+        access_log=False,
+    )
 
 
 if __name__ == "__main__":
