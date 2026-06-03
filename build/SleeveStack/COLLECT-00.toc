@@ -2936,13 +2936,13 @@
    'C:\\Users\\reyedu01\\AI Projects\\Collection '
    'Organizer\\frontend\\dist\\assets\\im-Dd9p-0-T.svg',
    'DATA'),
-  ('frontend\\dist\\assets\\index-BCN-D5Af.js',
+  ('frontend\\dist\\assets\\index-BhTKxyrn.css',
    'C:\\Users\\reyedu01\\AI Projects\\Collection '
-   'Organizer\\frontend\\dist\\assets\\index-BCN-D5Af.js',
+   'Organizer\\frontend\\dist\\assets\\index-BhTKxyrn.css',
    'DATA'),
-  ('frontend\\dist\\assets\\index-BxId_pka.css',
+  ('frontend\\dist\\assets\\index-BxypCxMT.js',
    'C:\\Users\\reyedu01\\AI Projects\\Collection '
-   'Organizer\\frontend\\dist\\assets\\index-BxId_pka.css',
+   'Organizer\\frontend\\dist\\assets\\index-BxypCxMT.js',
    'DATA'),
   ('frontend\\dist\\assets\\io-13HOfeJD.svg',
    'C:\\Users\\reyedu01\\AI Projects\\Collection '

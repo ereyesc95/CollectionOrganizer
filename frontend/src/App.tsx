@@ -140,6 +140,17 @@ export default function App() {
   }, [view]);
 
   useEffect(() => {
+    if (total <= 0) return;
+    const key = view === "grid" ? "page-size-grid" : "page-size-list";
+    if (localStorage.getItem(key) !== "all") return;
+    if (view === "grid") {
+      if (pageSizeGrid < total) setPageSizeGrid(total);
+    } else if (pageSizeList < total) {
+      setPageSizeList(total);
+    }
+  }, [total, view, pageSizeGrid, pageSizeList]);
+
+  useEffect(() => {
     setPage(1);
   }, [filters]);
 
@@ -151,10 +162,10 @@ export default function App() {
   const handlePageSizeChange = (size: number) => {
     if (view === "grid") {
       setPageSizeGrid(size);
-      savePageSize("grid", size);
+      savePageSize("grid", size, total);
     } else {
       setPageSizeList(size);
-      savePageSize("list", size);
+      savePageSize("list", size, total);
     }
     setPage(1);
   };

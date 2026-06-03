@@ -137,15 +137,49 @@ textarea {
 }
 
 .header-pagination .pagination-page {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
   font-size: 0.72rem;
   color: var(--text-muted);
-  min-width: 3.5rem;
-  text-align: center;
   white-space: nowrap;
 }
 
+.header-pagination .pagination-page-input {
+  width: 1.75rem;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  border-radius: 4px;
+  padding: 0.1rem 0.1rem;
+  text-align: center;
+  font-size: 0.72rem;
+  -moz-appearance: textfield;
+}
+
+.header-pagination .pagination-page-input:hover,
+.header-pagination .pagination-page-input:focus {
+  color: var(--text);
+  background: var(--bg-hover);
+  outline: none;
+}
+
+.header-pagination .pagination-page-sep {
+  opacity: 0.85;
+}
+
+.header-pagination .pagination-page-total {
+  min-width: 1.25rem;
+  text-align: left;
+}
+
+.pagination-size-wrap {
+  position: relative;
+  margin-left: 0.15rem;
+}
+
 .header-pagination .pagination-size-input {
-  width: 2.75rem;
+  width: 2.5rem;
   background: transparent;
   border: none;
   color: var(--text-muted);
@@ -154,7 +188,6 @@ textarea {
   text-align: center;
   font-size: 0.72rem;
   -moz-appearance: textfield;
-  margin-left: 0.15rem;
 }
 
 .header-pagination .pagination-size-input:hover,
@@ -162,6 +195,40 @@ textarea {
   color: var(--text);
   background: var(--bg-hover);
   outline: none;
+}
+
+.pagination-size-presets {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  z-index: 200;
+  margin: 0;
+  padding: 0.2rem;
+  list-style: none;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  min-width: 4.5rem;
+}
+
+.pagination-size-presets button {
+  display: block;
+  width: 100%;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  padding: 0.25rem 0.45rem;
+  text-align: left;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.pagination-size-presets button:hover,
+.pagination-size-presets button.is-active {
+  color: var(--text);
+  background: var(--bg-hover);
 }
 
 .header-pagination .pagination-size-input::-webkit-outer-spin-button,
@@ -202,6 +269,15 @@ textarea {
 .search-wrap:focus-within {
   outline: 2px solid var(--accent);
   border-color: transparent;
+}
+
+.search-wrap:not(.search-wrap--expanded) .search-input {
+  display: none;
+}
+
+.search-wrap:not(.search-wrap--expanded) .search-trigger {
+  width: 100%;
+  height: 100%;
 }
 
 .search-trigger {

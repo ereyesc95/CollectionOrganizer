@@ -90,7 +90,7 @@ def list_records(
     sort: str = "artist",
     order: str = "asc",
     page: int = Query(1, ge=1),
-    page_size: int = Query(100, ge=1, le=500),
+    page_size: int = Query(100, ge=1, le=5000),
     unit: str = Query("record"),
 ):
     def split_param(s: str) -> list[str]:
