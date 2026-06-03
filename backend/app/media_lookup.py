@@ -12,7 +12,9 @@ from app.autographs import get_autographs_folder
 from app.canvas_files import get_canvas_folder
 from app.card_files import CardType, get_card_folder
 from app.covers import get_covers_folder
-from app.media_find import CARD_EXTENSIONS, IMAGE_EXTENSIONS, VIDEO_EXTENSIONS, FolderIndex
+from app.card_files import CardSide, CardType, card_stem
+from app.covers import find_cover_path, get_covers_folder
+from app.media_find import CARD_EXTENSIONS, IMAGE_EXTENSIONS, VIDEO_EXTENSIONS, FolderIndex, media_stem
 from app.paths import DATA_DIR, database_file
 
 _cached_lookup: MediaLookup | None = None
@@ -120,3 +122,59 @@ def invalidate_media_lookup_cache() -> None:
     from app.list_cache import invalidate_list_cache
 
     invalidate_list_cache()
+
+
+def _index_find(index: FolderIndex | None, stem: str) -> Path | None:
+    return index.find(stem) if index else None
+
+
+def cached_cover_path(db: Session, cover_key: str) -> Path | None:
+    lookup = get_media_lookup(db)
+    path = _index_find(lookup.covers, cover_key)
+    if path:
+        return path
+    return find_cover_path(get_covers_folder(db), cover_key)
+
+
+def cached_animation_path(db: Session, cover_key: str, *, index: int = 1) -> Path | None:
+    from app.animations import find_animation_path, get_animations_folder
+
+    lookup = get_media_lookup(db)
+    stem = media_stem(cover_key, index)
+    path = _index_find(lookup.animations, stem)
+    if path:
+        return path
+    return find_animation_path(get_animations_folder(db), cover_key, index=index)
+
+
+def cached_canvas_path(db: Session, cover_key: str, *, index: int = 1) -> Path | None:
+    from app.canvas_files import find_canvas_path
+
+    lookup = get_media_lookup(db)
+    stem = media_stem(cover_key, index)
+    path = _index_find(lookup.canvas, stem)
+    if path:
+        return path
+    return find_canvas_path(db, cover_key, index=index)
+
+
+def cached_card_path(
+    db: Session, card_type: CardType, cover_key: str, side: CardSide
+) -> Path | None:
+    from app.card_files import find_card_path
+
+    lookup = get_media_lookup(db)
+    stem = card_stem(cover_key, side)
+    path = _index_find(lookup.card_index(card_type), stem)
+    if path:
+        return path
+    return find_card_path(db, card_type, cover_key, side)
+
+
+def cached_autograph_path(
+    db: Session, record_id: int, cover_key: str
+) -> Path | None:
+    from app.autographs import find_autograph_path
+
+    path, _ = find_autograph_path(db, record_id, cover_key, lookup=get_media_lookup(db))
+    return path

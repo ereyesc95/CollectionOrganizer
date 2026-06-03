@@ -99,6 +99,7 @@ class FacetsOut(BaseModel):
 class RecordListOut(BaseModel):
     items: list[RecordOut]
     total: int
+    record_total: int
     page: int
     page_size: int
 

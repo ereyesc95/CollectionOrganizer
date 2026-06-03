@@ -1,8 +1,7 @@
-from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
-from fastapi.responses import FileResponse
-from sqlalchemy.orm import Session
-
 from pathlib import Path
+
+from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
+from sqlalchemy.orm import Session
 
 from app.autographs import (
     delete_autograph,
@@ -13,6 +12,8 @@ from app.autographs import (
 )
 from app.database import get_db
 from app.folder_dialog import pick_image_file
+from app.media_lookup import cached_autograph_path, get_media_lookup
+from app.media_response import cached_media_file
 from app.models import Record
 
 router = APIRouter(prefix="/api/autographs", tags=["autographs"])
@@ -23,10 +24,10 @@ def serve_autograph(record_id: int, db: Session = Depends(get_db)):
     record = db.get(Record, record_id)
     if not record:
         raise HTTPException(404, "Record not found")
-    path, _ = find_autograph_path(db, record_id, record.cover_key)
+    path = cached_autograph_path(db, record_id, record.cover_key)
     if not path:
         raise HTTPException(404, "Autograph photo not found")
-    return FileResponse(path)
+    return cached_media_file(path)
 
 
 @router.post("/{record_id}")
@@ -61,7 +62,9 @@ def browse_autograph_file(record_id: int, db: Session = Depends(get_db)):
     folder = get_autographs_folder(db)
     initial = str(folder) if folder else ""
     chosen = pick_image_file(initial)
-    path_before, _ = find_autograph_path(db, record_id, record.cover_key)
+    path_before, _ = find_autograph_path(
+        db, record_id, record.cover_key, lookup=get_media_lookup(db)
+    )
     if not chosen:
         return {
             "selected": False,
@@ -71,7 +74,9 @@ def browse_autograph_file(record_id: int, db: Session = Depends(get_db)):
         import_autograph_from_path(db, record_id, record.cover_key, Path(chosen))
     except (FileNotFoundError, ValueError) as e:
         raise HTTPException(400, str(e)) from e
-    path_after, source = find_autograph_path(db, record_id, record.cover_key)
+    path_after, source = find_autograph_path(
+        db, record_id, record.cover_key, lookup=get_media_lookup(db)
+    )
     return {
         "selected": True,
         "has_photo": path_after is not None,

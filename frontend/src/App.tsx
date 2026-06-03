@@ -8,6 +8,8 @@ import {
 import AppIcon, { faviconHref } from "./components/AppIcon";
 import FiltersToggleIcon from "./components/FiltersToggleIcon";
 import HeaderMenu from "./components/HeaderMenu";
+import ExpandableSearch from "./components/ExpandableSearch";
+import PaginationBar, { loadPageSize, savePageSize } from "./components/PaginationBar";
 import RecordGrid from "./components/RecordGrid";
 import RecordModal from "./components/RecordModal";
 import RecordTable from "./components/RecordTable";
@@ -51,7 +53,12 @@ const defaultFilters: Filters = {
   sortKeys: loadSortKeys(),
 };
 
-function buildParams(filters: Filters): URLSearchParams {
+function buildParams(
+  filters: Filters,
+  page: number,
+  pageSize: number,
+  view: ViewMode
+): URLSearchParams {
   const p = new URLSearchParams();
   if (filters.search) p.set("search", filters.search);
   if (filters.media.length) p.set("media", filters.media.join(","));
@@ -69,7 +76,9 @@ function buildParams(filters: Filters): URLSearchParams {
   if (filters.hasCover) p.set("has_cover", filters.hasCover === "yes" ? "true" : "false");
   p.set("sort", filters.sortKeys.map((k) => k.field).join(","));
   p.set("order", filters.sortKeys.map((k) => k.order).join(","));
-  p.set("page_size", "500");
+  p.set("page", String(page));
+  p.set("page_size", String(pageSize));
+  if (view === "grid") p.set("unit", "album");
   return p;
 }
 
@@ -91,10 +100,15 @@ export default function App() {
   const [facets, setFacets] = useState<Facets | null>(null);
   const [records, setRecords] = useState<Record[]>([]);
   const [total, setTotal] = useState(0);
+  const [recordTotal, setRecordTotal] = useState(0);
   const [filters, setFilters] = useState<Filters>(defaultFilters);
   const [view, setView] = useState<ViewMode>(() =>
     (localStorage.getItem("view-mode") as ViewMode) || "grid"
   );
+  const [pageSizeGrid, setPageSizeGrid] = useState(() => loadPageSize("grid"));
+  const [pageSizeList, setPageSizeList] = useState(() => loadPageSize("list"));
+  const [page, setPage] = useState(1);
+  const pageSize = view === "grid" ? pageSizeGrid : pageSizeList;
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [selected, setSelected] = useState<Record | null>(null);
@@ -125,6 +139,26 @@ export default function App() {
     localStorage.setItem("view-mode", view);
   }, [view]);
 
+  useEffect(() => {
+    setPage(1);
+  }, [filters]);
+
+  useEffect(() => {
+    const maxPage = Math.max(1, Math.ceil(total / pageSize));
+    if (page > maxPage) setPage(maxPage);
+  }, [total, pageSize, page]);
+
+  const handlePageSizeChange = (size: number) => {
+    if (view === "grid") {
+      setPageSizeGrid(size);
+      savePageSize("grid", size);
+    } else {
+      setPageSizeList(size);
+      savePageSize("list", size);
+    }
+    setPage(1);
+  };
+
   const load = useCallback(async (opts?: { silent?: boolean }) => {
     const silent = opts?.silent ?? false;
     if (silent && mainRef.current) {
@@ -140,11 +174,12 @@ export default function App() {
     try {
       const [facetData, listData] = await Promise.all([
         fetchFacets(),
-        fetchRecords(buildParams(filters)),
+        fetchRecords(buildParams(filters, page, pageSize, view)),
       ]);
       setFacets(facetData);
       setRecords(listData.items.map(normalizeRecord));
       setTotal(listData.total);
+      setRecordTotal(listData.record_total ?? listData.total);
       setLoadError(null);
     } catch (e) {
       const msg = e instanceof Error ? e.message : "Failed to load";
@@ -153,7 +188,7 @@ export default function App() {
     } finally {
       if (!silent) setLoading(false);
     }
-  }, [filters]);
+  }, [filters, page, pageSize, view]);
 
   useEffect(() => {
     void load();
@@ -252,26 +287,25 @@ export default function App() {
           <FiltersToggleIcon />
         </button>
         <div className="brand">
-          <AppIcon size={26} />
+          <AppIcon size={22} />
           <h1>{APP_NAME}</h1>
         </div>
-        <span className="count">{total} records</span>
-        <div className="header-actions">
-          <label className="search-wrap">
-            <span className="search-icon" aria-hidden>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <circle cx="11" cy="11" r="7" />
-                <path d="M20 20L16 16" strokeLinecap="round" />
-              </svg>
-            </span>
-            <input
-              className="search-input"
-              type="search"
-              placeholder="Search"
-              value={filters.search}
-              onChange={(e) => setFilters((f) => ({ ...f, search: e.target.value }))}
+        <span className="count">{recordTotal} records</span>
+        <div className="header-end">
+          {!loading && !loadError && (
+            <PaginationBar
+              page={page}
+              pageSize={pageSize}
+              total={total}
+              onPageChange={setPage}
+              onPageSizeChange={handlePageSizeChange}
             />
-          </label>
+          )}
+          <div className="header-actions">
+            <ExpandableSearch
+              value={filters.search}
+              onChange={(search) => setFilters((f) => ({ ...f, search }))}
+            />
           <ViewToggle view={view} onChange={setView} />
           <HeaderMenu
             theme={theme}
@@ -286,6 +320,7 @@ export default function App() {
             }}
             onRefresh={() => setRefreshKey((k) => k + 1)}
           />
+          </div>
         </div>
       </header>
 

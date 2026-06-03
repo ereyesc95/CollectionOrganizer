@@ -1,8 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from app.card_files import CardSide, CardType, find_card_path
+from app.card_files import CardSide, CardType
 from app.database import get_db
+from app.media_lookup import cached_card_path
 from app.media_response import cached_media_file
 from app.models import Record
 
@@ -26,7 +27,7 @@ def serve_card(
     record = db.get(Record, record_id)
     if not record:
         raise HTTPException(404, "Record not found")
-    path = find_card_path(db, card_type, record.cover_key, side)  # type: ignore[arg-type]
+    path = cached_card_path(db, card_type, record.cover_key, side)  # type: ignore[arg-type]
     if not path:
         raise HTTPException(404, "Card file not found")
     return cached_media_file(path)

@@ -39,6 +39,7 @@ def _list_query_key(
     order: str,
     page: int,
     page_size: int,
+    unit: str = "",
 ) -> str:
     parts = [
         ("search", search),
@@ -59,6 +60,7 @@ def _list_query_key(
         ("order", order),
         ("page", str(page)),
         ("page_size", str(page_size)),
+        ("unit", unit),
     ]
     return "&".join(f"{k}={v}" for k, v in parts)
 
@@ -87,8 +89,9 @@ def list_records(
     has_cover: str | None = None,
     sort: str = "artist",
     order: str = "asc",
-    page: int = 1,
-    page_size: int = 100,
+    page: int = Query(1, ge=1),
+    page_size: int = Query(100, ge=1, le=500),
+    unit: str = Query("record"),
 ):
     def split_param(s: str) -> list[str]:
         return [x.strip() for x in s.split(",") if x.strip()]
@@ -97,6 +100,8 @@ def list_records(
         if v is None or v == "":
             return None
         return v.lower() in ("true", "1", "yes")
+
+    list_unit = "album" if unit == "album" else "record"
 
     query_key = _list_query_key(
         search=search,
@@ -117,13 +122,14 @@ def list_records(
         order=order,
         page=page,
         page_size=page_size,
+        unit=list_unit,
     )
     epoch = cache_epoch(db)
     cached = list_cache_get(epoch, query_key)
     if cached is not None:
         return cached
 
-    items, total = crud.list_records(
+    items, total, record_total = crud.list_records(
         db,
         search=search,
         media=split_param(media) or None,
@@ -143,11 +149,13 @@ def list_records(
         order=order,
         page=page,
         page_size=page_size,
+        unit=list_unit,
     )
     lookup = get_media_lookup(db)
     result = RecordListOut(
         items=[crud.record_to_out(db, r, lookup=lookup) for r in items],
         total=total,
+        record_total=record_total,
         page=page,
         page_size=page_size,
     )

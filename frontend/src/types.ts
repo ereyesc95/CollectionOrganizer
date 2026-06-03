@@ -67,6 +67,7 @@ export interface Facets {
 export interface RecordList {
   items: Record[];
   total: number;
+  record_total: number;
   page: number;
   page_size: number;
 }

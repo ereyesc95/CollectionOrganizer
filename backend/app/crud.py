@@ -309,9 +309,10 @@ def list_records(
     has_cover: bool | None = None,
     sort: str = "artist",
     order: str = "asc",
-    page: int = 1,
-    page_size: int = 50,
-) -> tuple[list[Record], int]:
+    page: int,
+    page_size: int,
+    unit: str = "record",
+) -> tuple[list[Record], int, int]:
     q = select(Record).options(*_record_load_options())
 
     if search.strip():
@@ -442,6 +443,30 @@ def list_records(
     while len(order_parts) < len(sort_fields):
         order_parts.append(order_parts[-1] if order_parts else "asc")
 
+    record_total = sum(
+        collection_unit_count(r.release_type, (t.tag for t in r.media_tags))
+        for r in records_all
+    )
+
+    if unit == "album":
+        album_groups = _group_records_by_album(records_all)
+
+        for i in range(len(sort_fields) - 1, -1, -1):
+            field = sort_fields[i]
+            rev = order_parts[i].lower() == "desc"
+
+            def album_sort_key(group: list[Record], f=field):
+                rep = group[0]
+                v = field_key(f, rep)
+                return v if isinstance(v, tuple) else (v,)
+
+            album_groups.sort(key=album_sort_key, reverse=rev)
+
+        page_total = len(album_groups)
+        start = (page - 1) * page_size
+        page_items = [r for g in album_groups[start : start + page_size] for r in g]
+        return page_items, page_total, record_total
+
     # Stable multi-key sort: apply from last field to first
     for i in range(len(sort_fields) - 1, -1, -1):
         field = sort_fields[i]
@@ -453,13 +478,29 @@ def list_records(
 
         records_all = sorted(records_all, key=single_key, reverse=rev)
 
-    total = sum(
-        collection_unit_count(r.release_type, (t.tag for t in r.media_tags))
-        for r in records_all
-    )
     start = (page - 1) * page_size
     page_items = records_all[start : start + page_size]
-    return page_items, total
+    return page_items, record_total, record_total
+
+
+def _album_group_key(r: Record) -> tuple[str, int, str]:
+    return (r.artist.lower(), r.record_year or 0, r.title.lower())
+
+
+def _edition_order_key(r: Record) -> tuple[int, str]:
+    if not r.edition_year and not r.edition_title:
+        return (0, "")
+    return (1, f"{r.edition_year or 0}|{(r.edition_title or '').lower()}")
+
+
+def _group_records_by_album(records: list[Record]) -> list[list[Record]]:
+    by_key: dict[tuple[str, int, str], list[Record]] = {}
+    for r in records:
+        by_key.setdefault(_album_group_key(r), []).append(r)
+    groups = list(by_key.values())
+    for group in groups:
+        group.sort(key=_edition_order_key)
+    return groups
 
 
 def get_facets(db: Session) -> FacetsOut:
