@@ -276,7 +276,9 @@ export default function CardAlbumBack({
           <ArtworkIcon />
         </button>
       )}
-      <div className="card-album-back-header">
+      <div
+        className={`card-album-back-header${artwork.length > 0 ? " card-album-back-header--has-artwork" : ""}`}
+      >
         <MarqueeText text={record.title} className="card-album-back-title" />
         <div
           ref={editionAnchorRef}

@@ -123,24 +123,19 @@ def _dir_has_audio_files(path: Path) -> bool:
     return False
 
 
-def resolve_track_root(album_dir: Path, record: Record) -> Path:
+def resolve_track_root(album_dir: Path, record: Record) -> Path | None:
     edition_dirs = _edition_subdirs(album_dir)
+    if not edition_dirs:
+        return album_dir if _dir_has_audio_files(album_dir) else None
+
+    for d in edition_dirs:
+        if _edition_matches(d.name, record):
+            return d
+
     if _dir_has_audio_files(album_dir):
         return album_dir
-    if not edition_dirs:
-        return album_dir
-    et = (record.edition_title or "").strip()
-    if et or record.edition_year is not None:
-        for d in edition_dirs:
-            if _edition_matches(d.name, record):
-                return d
-    if len(edition_dirs) == 1:
-        return edition_dirs[0]
-    if not et and record.edition_year is None:
-        for d in edition_dirs:
-            if "standard" in _norm(d.name):
-                return d
-    return album_dir
+
+    return None
 
 
 def _track_from_filename(path: Path) -> tuple[str | None, str]:

@@ -1065,10 +1065,14 @@ table.records-table {
   position: relative;
   z-index: 2;
   flex-shrink: 0;
+  min-width: 0;
   padding: 0.55rem 0.65rem 0.35rem;
-  padding-right: 1.85rem;
   color: #fff;
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.65);
+}
+
+.card-album-back-header--has-artwork {
+  padding-right: 2.35rem;
 }
 
 .card-album-back-artwork-btn {
@@ -1198,6 +1202,11 @@ table.records-table {
   font-size: 0.82rem;
   font-weight: 700;
   line-height: 1.2;
+}
+
+.card-album-back-title.marquee {
+  width: 100%;
+  min-width: 0;
 }
 
 .card-album-back-title .marquee-text {
