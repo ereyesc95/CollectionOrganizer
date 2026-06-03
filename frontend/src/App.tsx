@@ -96,6 +96,7 @@ export default function App() {
     (localStorage.getItem("view-mode") as ViewMode) || "grid"
   );
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [selected, setSelected] = useState<Record | null>(null);
   const [isNew, setIsNew] = useState(false);
   const [toast, setToast] = useState<{ msg: string; type: "success" | "error" } | null>(null);
@@ -132,7 +133,10 @@ export default function App() {
       const el = scrollContainer(mainRef.current);
       if (el) el.scrollTop = 0;
     }
-    if (!silent) setLoading(true);
+    if (!silent) {
+      setLoading(true);
+      setLoadError(null);
+    }
     try {
       const [facetData, listData] = await Promise.all([
         fetchFacets(),
@@ -141,8 +145,11 @@ export default function App() {
       setFacets(facetData);
       setRecords(listData.items.map(normalizeRecord));
       setTotal(listData.total);
+      setLoadError(null);
     } catch (e) {
-      showToast(e instanceof Error ? e.message : "Failed to load", "error");
+      const msg = e instanceof Error ? e.message : "Failed to load";
+      setLoadError(msg);
+      showToast(msg, "error");
     } finally {
       if (!silent) setLoading(false);
     }
@@ -314,6 +321,18 @@ export default function App() {
           )}
           {loading ? (
             <div className="loading">Loading…</div>
+          ) : loadError ? (
+            <div className="load-error">
+              <p>{loadError}</p>
+              <p className="load-error-hint">
+                Check that SleeveStack.exe or <code>python run.py</code> is running, then open{" "}
+                <code>http://127.0.0.1:8000</code> (or the port shown in the terminal). In DevTools
+                → Network, confirm <code>/api/records</code> returns 200.
+              </p>
+              <button type="button" className="btn-primary" onClick={() => void load()}>
+                Retry
+              </button>
+            </div>
           ) : view === "list" ? (
             <RecordTable
               records={records}

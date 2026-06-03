@@ -1902,6 +1902,29 @@ table.records-table {
   color: var(--text-muted);
 }
 
+.load-error {
+  max-width: 36rem;
+  margin: 2rem auto;
+  padding: 1.25rem 1.5rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-elevated);
+}
+
+.load-error p {
+  margin: 0 0 0.75rem;
+}
+
+.load-error-hint {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.load-error code {
+  font-size: 0.85em;
+}
+
 .toast {
   position: fixed;
   bottom: 1.25rem;

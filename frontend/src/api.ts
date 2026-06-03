@@ -9,9 +9,29 @@ import type {
 } from "./types";
 
 const API = "/api";
+const FETCH_TIMEOUT_MS = 30_000;
 
 async function request<T>(url: string, init?: RequestInit): Promise<T> {
-  const res = await fetch(url, init);
+  const controller = new AbortController();
+  const timeout = window.setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
+  let res: Response;
+  try {
+    res = await fetch(url, { ...init, signal: controller.signal });
+  } catch (e) {
+    if (e instanceof Error && e.name === "AbortError") {
+      throw new Error(
+        "Request timed out. Is the RecordStack server running? Try restarting SleeveStack.exe or python run.py."
+      );
+    }
+    if (e instanceof TypeError) {
+      throw new Error(
+        "Cannot reach the API. Open the app from the same URL as the server (e.g. http://127.0.0.1:8000), not a file path or the Vite dev port alone."
+      );
+    }
+    throw e;
+  } finally {
+    window.clearTimeout(timeout);
+  }
   if (!res.ok) {
     const text = await res.text();
     try {

@@ -37,8 +37,16 @@ def find_animation_path(
     return find_by_stem(folder, cover_key, VIDEO_EXTENSIONS, index=index)
 
 
-def animation_files_for_tags(folder: Path | None, cover_key: str, tag_count: int) -> list[bool]:
-    return media_files_for_tags(folder, cover_key, tag_count, VIDEO_EXTENSIONS)
+def animation_files_for_tags(
+    folder: Path | None,
+    cover_key: str,
+    tag_count: int,
+    *,
+    cache=None,
+) -> list[bool]:
+    return media_files_for_tags(
+        folder, cover_key, tag_count, VIDEO_EXTENSIONS, cache=cache
+    )
 
 
 def animation_url_for(record_id: int, *, index: int = 1) -> str:

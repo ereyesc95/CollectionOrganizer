@@ -12,6 +12,8 @@ from app.animations import (
 from app.autographs import autograph_url_for, find_autograph_path
 from app.canvas_files import canvas_files_for_tags, canvas_url_for, find_canvas_path
 from app.covers import cover_url_for, find_cover_path, get_covers_folder
+from app.media_find import IMAGE_EXTENSIONS, FolderIndex
+from app.media_lookup import MediaLookup
 from app.record_assets import build_record_assets
 from app.models import (
     Record,
@@ -114,22 +116,41 @@ def _propagate_artist_country(
         _set_tags(db, sibling, RecordCountryTag, "country_tags", tags)
 
 
-def record_to_out(db: Session, record: Record) -> RecordOut:
+def record_to_out(
+    db: Session, record: Record, *, lookup: MediaLookup | None = None
+) -> RecordOut:
     covers_folder = get_covers_folder(db)
     animations_folder = get_animations_folder(db)
-    cover_path = find_cover_path(covers_folder, record.cover_key)
-    animation_path = find_animation_path(animations_folder, record.cover_key)
-    canvas_path = find_canvas_path(db, record.cover_key)
+    if lookup and lookup.covers:
+        cover_path = lookup.covers.find(record.cover_key)
+    else:
+        cover_path = find_cover_path(covers_folder, record.cover_key)
+    if lookup and lookup.animations:
+        animation_path = lookup.animations.find(record.cover_key)
+    else:
+        animation_path = find_animation_path(animations_folder, record.cover_key)
+    if lookup and lookup.canvas:
+        canvas_path = lookup.canvas.find(record.cover_key)
+    else:
+        canvas_path = find_canvas_path(db, record.cover_key)
     animation_tag_count = len(record.animation_tags)
     canvas_tag_count = len(record.canvas_tags)
     animation_files = animation_files_for_tags(
-        animations_folder, record.cover_key, animation_tag_count
+        animations_folder,
+        record.cover_key,
+        animation_tag_count,
+        cache=lookup.animations if lookup else None,
     )
-    canvas_files = canvas_files_for_tags(db, record.cover_key, canvas_tag_count)
+    canvas_files = canvas_files_for_tags(
+        db,
+        record.cover_key,
+        canvas_tag_count,
+        cache=lookup.canvas if lookup else None,
+    )
     autograph_path, autograph_source = find_autograph_path(
-        db, record.id, record.cover_key
+        db, record.id, record.cover_key, lookup=lookup
     )
-    assets = build_record_assets(db, record)
+    assets = build_record_assets(db, record, lookup=lookup)
     return RecordOut(
         id=record.id,
         cover_key=record.cover_key,
@@ -391,10 +412,10 @@ def list_records(
     records_all = db.scalars(q).unique().all()
 
     if has_cover is not None:
-        folder = get_covers_folder(db)
+        covers_idx = FolderIndex.build(get_covers_folder(db), IMAGE_EXTENSIONS)
         filtered = []
         for r in records_all:
-            found = find_cover_path(folder, r.cover_key) is not None
+            found = covers_idx.find(r.cover_key) is not None if covers_idx else False
             if found == has_cover:
                 filtered.append(r)
         records_all = filtered

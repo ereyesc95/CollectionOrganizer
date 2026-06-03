@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 
 from app import crud
 from app.database import get_db
+from app.media_lookup import MediaLookup
 from app.models import Record
 from app.parse_album import build_cover_key, parse_album
 from app.schemas import (
@@ -73,8 +74,9 @@ def list_records(
         page=page,
         page_size=page_size,
     )
+    lookup = MediaLookup.build(db)
     return RecordListOut(
-        items=[crud.record_to_out(db, r) for r in items],
+        items=[crud.record_to_out(db, r, lookup=lookup) for r in items],
         total=total,
         page=page,
         page_size=page_size,

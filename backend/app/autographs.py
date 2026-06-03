@@ -1,11 +1,14 @@
 import shutil
 from pathlib import Path
-from typing import Literal
+from typing import TYPE_CHECKING, Literal
 
 from sqlalchemy.orm import Session
 
 from app.config import settings
 from app.media_find import IMAGE_EXTENSIONS, find_by_stem
+
+if TYPE_CHECKING:
+    from app.media_lookup import MediaLookup
 from app.models import AppSetting
 from app.paths import DATA_DIR, ensure_data_dir
 from app.source_folders import SUB_AUTOGRAPHS, get_subfolder
@@ -58,12 +61,20 @@ def find_autograph_path(
     db: Session,
     record_id: int,
     cover_key: str,
+    *,
+    lookup: "MediaLookup | None" = None,
 ) -> tuple[Path | None, AutographSource | None]:
     """Folder is the default; per-record upload overrides when present."""
-    uploaded = find_uploaded_autograph(record_id)
+    if lookup and lookup.autograph_uploads:
+        uploaded = lookup.autograph_uploads.find(str(record_id))
+    else:
+        uploaded = find_uploaded_autograph(record_id)
     if uploaded:
         return uploaded, "upload"
-    folder_path = find_folder_autograph(db, cover_key)
+    if lookup and lookup.autographs:
+        folder_path = lookup.autographs.find(cover_key)
+    else:
+        folder_path = find_folder_autograph(db, cover_key)
     if folder_path:
         return folder_path, "folder"
     return None, None
