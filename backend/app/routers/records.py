@@ -3,7 +3,8 @@ from sqlalchemy.orm import Session
 
 from app import crud
 from app.database import get_db
-from app.media_lookup import MediaLookup
+from app.list_cache import list_cache_get, list_cache_set
+from app.media_lookup import cache_epoch, get_media_lookup
 from app.models import Record
 from app.parse_album import build_cover_key, parse_album
 from app.schemas import (
@@ -16,6 +17,50 @@ from app.schemas import (
 )
 
 router = APIRouter(prefix="/api/records", tags=["records"])
+
+
+def _list_query_key(
+    *,
+    search: str,
+    media: str,
+    animation: str,
+    canvas: str,
+    autograph: str,
+    release_type: str,
+    genre: str,
+    country: str,
+    pending: str,
+    has_autograph: str | None,
+    has_animation: str | None,
+    has_canvas: str | None,
+    has_pending: str | None,
+    has_cover: str | None,
+    sort: str,
+    order: str,
+    page: int,
+    page_size: int,
+) -> str:
+    parts = [
+        ("search", search),
+        ("media", media),
+        ("animation", animation),
+        ("canvas", canvas),
+        ("autograph", autograph),
+        ("release_type", release_type),
+        ("genre", genre),
+        ("country", country),
+        ("pending", pending),
+        ("has_autograph", has_autograph or ""),
+        ("has_animation", has_animation or ""),
+        ("has_canvas", has_canvas or ""),
+        ("has_pending", has_pending or ""),
+        ("has_cover", has_cover or ""),
+        ("sort", sort),
+        ("order", order),
+        ("page", str(page)),
+        ("page_size", str(page_size)),
+    ]
+    return "&".join(f"{k}={v}" for k, v in parts)
 
 
 @router.get("/facets", response_model=FacetsOut)
@@ -53,6 +98,31 @@ def list_records(
             return None
         return v.lower() in ("true", "1", "yes")
 
+    query_key = _list_query_key(
+        search=search,
+        media=media,
+        animation=animation,
+        canvas=canvas,
+        autograph=autograph,
+        release_type=release_type,
+        genre=genre,
+        country=country,
+        pending=pending,
+        has_autograph=has_autograph,
+        has_animation=has_animation,
+        has_canvas=has_canvas,
+        has_pending=has_pending,
+        has_cover=has_cover,
+        sort=sort,
+        order=order,
+        page=page,
+        page_size=page_size,
+    )
+    epoch = cache_epoch(db)
+    cached = list_cache_get(epoch, query_key)
+    if cached is not None:
+        return cached
+
     items, total = crud.list_records(
         db,
         search=search,
@@ -74,13 +144,15 @@ def list_records(
         page=page,
         page_size=page_size,
     )
-    lookup = MediaLookup.build(db)
-    return RecordListOut(
+    lookup = get_media_lookup(db)
+    result = RecordListOut(
         items=[crud.record_to_out(db, r, lookup=lookup) for r in items],
         total=total,
         page=page,
         page_size=page_size,
     )
+    list_cache_set(epoch, query_key, result)
+    return result
 
 
 @router.get("/parse-preview", response_model=ParsePreview)
@@ -101,7 +173,7 @@ def get_record(record_id: int, db: Session = Depends(get_db)):
     record = crud.get_record(db, record_id)
     if not record:
         raise HTTPException(404, "Record not found")
-    return crud.record_to_out(db, record)
+    return crud.record_to_out(db, record, lookup=get_media_lookup(db))
 
 
 @router.post("", response_model=RecordOut, status_code=201)

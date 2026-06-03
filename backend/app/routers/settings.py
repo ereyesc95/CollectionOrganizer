@@ -7,6 +7,7 @@ from app.covers import get_covers_folder
 from app.database import get_db
 from app.folder_dialog import pick_folder
 from app.schemas import BrowseResult, SettingsOut, SettingsUpdate, SourceFolderBrowseResult
+from app.media_lookup import invalidate_media_lookup_cache
 from app.source_folders import get_source_root, set_source_root
 
 router = APIRouter(prefix="/api/settings", tags=["settings"])
@@ -39,6 +40,7 @@ def update_settings(data: SettingsUpdate, db: Session = Depends(get_db)):
                 400,
                 f"Missing subfolders: {', '.join(missing)}",
             )
+        invalidate_media_lookup_cache()
     return _settings_out(db)
 
 
@@ -70,6 +72,7 @@ def browse_covers_folder(db: Session = Depends(get_db)):
     if not chosen:
         return BrowseResult(path=initial, selected=False)
     set_covers_folder(db, chosen)
+    invalidate_media_lookup_cache()
     return BrowseResult(path=chosen, selected=True)
 
 
@@ -83,6 +86,7 @@ def browse_animations_folder(db: Session = Depends(get_db)):
     if not chosen:
         return BrowseResult(path=initial, selected=False)
     set_animations_folder(db, chosen)
+    invalidate_media_lookup_cache()
     return BrowseResult(path=chosen, selected=True)
 
 
@@ -96,4 +100,5 @@ def browse_autographs_folder(db: Session = Depends(get_db)):
     if not chosen:
         return BrowseResult(path=initial, selected=False)
     set_autographs_folder(db, chosen)
+    invalidate_media_lookup_cache()
     return BrowseResult(path=chosen, selected=True)

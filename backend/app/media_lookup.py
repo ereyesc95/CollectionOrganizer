@@ -1,4 +1,4 @@
-"""One-time folder indexes for list API — avoids scanning media dirs per record."""
+"""Folder indexes for list API — built once and reused until paths or folders change."""
 
 from __future__ import annotations
 
@@ -13,7 +13,10 @@ from app.canvas_files import get_canvas_folder
 from app.card_files import CardType, get_card_folder
 from app.covers import get_covers_folder
 from app.media_find import CARD_EXTENSIONS, IMAGE_EXTENSIONS, VIDEO_EXTENSIONS, FolderIndex
-from app.paths import DATA_DIR
+from app.paths import DATA_DIR, database_file
+
+_cached_lookup: MediaLookup | None = None
+_cached_fingerprint: str | None = None
 
 
 @dataclass
@@ -58,3 +61,62 @@ class MediaLookup:
 
     def cover_exists(self, cover_key: str) -> bool:
         return self.covers is not None and self.covers.find(cover_key) is not None
+
+
+def _folder_stat_token(path: Path | None) -> str:
+    if not path or not path.is_dir():
+        return ""
+    try:
+        st = path.stat()
+        return f"{path.resolve()}:{st.st_mtime_ns}:{st.st_size}"
+    except OSError:
+        return str(path)
+
+
+def media_lookup_fingerprint(db: Session) -> str:
+    """Changes when configured media folders or their contents' directory metadata change."""
+    uploads = DATA_DIR / "autographs"
+    folders = (
+        get_covers_folder(db),
+        get_animations_folder(db),
+        get_canvas_folder(db),
+        get_autographs_folder(db),
+        uploads if uploads.is_dir() else None,
+        get_card_folder(db, "spotify"),
+        get_card_folder(db, "landscape"),
+        get_card_folder(db, "portrait"),
+    )
+    return "|".join(_folder_stat_token(p) for p in folders)
+
+
+def database_epoch_token() -> str:
+    db_path = database_file()
+    if not db_path.is_file():
+        return "missing"
+    try:
+        st = db_path.stat()
+        return f"{db_path.resolve()}:{st.st_mtime_ns}:{st.st_size}"
+    except OSError:
+        return str(db_path)
+
+
+def cache_epoch(db: Session) -> str:
+    return f"{database_epoch_token()}|{media_lookup_fingerprint(db)}"
+
+
+def get_media_lookup(db: Session) -> MediaLookup:
+    global _cached_lookup, _cached_fingerprint
+    fp = media_lookup_fingerprint(db)
+    if _cached_lookup is None or fp != _cached_fingerprint:
+        _cached_lookup = MediaLookup.build(db)
+        _cached_fingerprint = fp
+    return _cached_lookup
+
+
+def invalidate_media_lookup_cache() -> None:
+    global _cached_lookup, _cached_fingerprint
+    _cached_lookup = None
+    _cached_fingerprint = None
+    from app.list_cache import invalidate_list_cache
+
+    invalidate_list_cache()

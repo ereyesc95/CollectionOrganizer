@@ -455,6 +455,10 @@
    'C:\\Users\\reyedu01\\AI Projects\\Collection '
    'Organizer\\backend\\app\\import_excel.py',
    'PYMODULE'),
+  ('app.list_cache',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\backend\\app\\list_cache.py',
+   'PYMODULE'),
   ('app.local_host',
    'C:\\Users\\reyedu01\\AI Projects\\Collection '
    'Organizer\\backend\\app\\local_host.py',
@@ -466,6 +470,10 @@
   ('app.media_find',
    'C:\\Users\\reyedu01\\AI Projects\\Collection '
    'Organizer\\backend\\app\\media_find.py',
+   'PYMODULE'),
+  ('app.media_lookup',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\backend\\app\\media_lookup.py',
    'PYMODULE'),
   ('app.media_response',
    'C:\\Users\\reyedu01\\AI Projects\\Collection '
