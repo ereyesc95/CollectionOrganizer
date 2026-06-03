@@ -7,8 +7,11 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.config import settings
 from app.local_host import app_url
 from app.frontend_static import mount_frontend
-from app.paths import resolve_frontend_dist
-from app.database import init_db
+from sqlalchemy import func, select
+
+from app.paths import database_file, resolve_frontend_dist
+from app.database import SessionLocal, init_db
+from app.models import Record, RecordCountryTag, RecordGenreTag
 from app.routers import (
     animations,
     audio,
@@ -68,10 +71,38 @@ app.include_router(audio.router)
 @app.get("/api/health")
 def health():
     dist = resolve_frontend_dist()
+    db_path = database_file()
+    stats: dict = {}
+    try:
+        db = SessionLocal()
+        try:
+            stats = {
+                "records": db.scalar(select(func.count()).select_from(Record)) or 0,
+                "genre_tag_rows": db.scalar(
+                    select(func.count()).select_from(RecordGenreTag)
+                )
+                or 0,
+                "country_tag_rows": db.scalar(
+                    select(func.count()).select_from(RecordCountryTag)
+                )
+                or 0,
+                "with_release_type": db.scalar(
+                    select(func.count()).select_from(Record).where(
+                        Record.release_type.isnot(None)
+                    )
+                )
+                or 0,
+            }
+        finally:
+            db.close()
+    except Exception as e:
+        stats = {"error": str(e)}
     return {
         "status": "ok",
         "frontend": dist is not None,
         "frontend_path": str(dist) if dist else None,
+        "database_path": str(db_path),
+        "database": stats,
     }
 
 

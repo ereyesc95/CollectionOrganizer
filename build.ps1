@@ -53,6 +53,14 @@ $feOut = "$outDir\frontend\dist"
 New-Item -ItemType Directory -Force -Path $feOut | Out-Null
 Copy-Item -Path "$Root\frontend\dist\*" -Destination $feOut -Recurse -Force
 
+# Copy collection database beside exe (portable zip without full git clone)
+if (Test-Path "$Root\data\collection.db") {
+    $dataOut = "$outDir\data"
+    New-Item -ItemType Directory -Force -Path $dataOut | Out-Null
+    Copy-Item "$Root\data\collection.db" "$dataOut\collection.db" -Force
+    Write-Host "  Copied data\collection.db -> dist\SleeveStack\data\" -ForegroundColor Green
+}
+
 Write-Host "`n[4/5] Creating ZIP portable package..." -ForegroundColor Yellow
 $zipPath = "$Root\dist\SleeveStack-portable.zip"
 if (Test-Path $zipPath) { Remove-Item $zipPath -Force }

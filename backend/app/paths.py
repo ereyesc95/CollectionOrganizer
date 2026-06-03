@@ -57,6 +57,23 @@ def ensure_data_dir() -> None:
     (DATA_DIR / "autographs").mkdir(parents=True, exist_ok=True)
 
 
+def database_file() -> Path:
+    """
+    SQLite database path.
+
+    When the packaged app lives at repo/dist/SleeveStack/, use repo/data/collection.db
+    so git pull updates the DB the app reads. Portable-only installs keep data/ next to the exe.
+    """
+    ensure_data_dir()
+    local = DATA_DIR / "collection.db"
+    if is_frozen():
+        for base in (install_dir().parent.parent, install_dir().parent):
+            candidate = (base / "data" / "collection.db").resolve()
+            if candidate.is_file():
+                return candidate
+    return local
+
+
 def default_xlsx_path() -> Path | None:
     for base in (PROJECT_ROOT, BUNDLE_ROOT):
         candidate = base / "Collection.xlsx"

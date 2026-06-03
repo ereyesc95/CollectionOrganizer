@@ -41,9 +41,9 @@ def get_lan_ip() -> str | None:
 def first_run_import() -> None:
     from app.database import SessionLocal, init_db
     from app.import_excel import import_from_xlsx
-    from app.paths import DATA_DIR, default_xlsx_path
+    from app.paths import database_file, default_xlsx_path
 
-    db_file = DATA_DIR / "collection.db"
+    db_file = database_file()
     if db_file.exists():
         return
     xlsx = default_xlsx_path()
