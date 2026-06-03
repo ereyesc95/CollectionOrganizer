@@ -46,7 +46,7 @@ def run_import() -> None:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="SleeveStack")
+    parser = argparse.ArgumentParser(description="RecordStack")
     parser.add_argument("--import-only", action="store_true", help="Import Excel and exit")
     parser.add_argument("--port", type=int, default=8000)
     parser.add_argument("--no-browser", action="store_true")
@@ -62,8 +62,12 @@ def main() -> None:
         print("First run: importing Collection.xlsx …")
         run_import()
 
+    sys.path.insert(0, str(BACKEND))
+    from app.local_host import app_url
+
     if (ROOT / "frontend" / "dist").is_dir():
-        open_url = f"http://127.0.0.1:{args.port}/"
+        open_url = app_url(args.port)
+        print(f"RecordStack: {open_url}")
     else:
         open_url = "http://localhost:5173/"
         print("Dev UI: run in another terminal: cd frontend && npm install && npm run dev")
@@ -71,7 +75,6 @@ def main() -> None:
     if not args.no_browser:
         webbrowser.open(open_url)
 
-    sys.path.insert(0, str(BACKEND))
     import uvicorn
 
     uvicorn.run("app.main:app", host="127.0.0.1", port=args.port, reload=False, app_dir=str(BACKEND))

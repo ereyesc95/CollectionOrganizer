@@ -1,4 +1,6 @@
 import type {
+  ArtworkListResponse,
+  AudioTracksResponse,
   Facets,
   ImportResult,
   ParsePreview,
@@ -12,6 +14,15 @@ async function request<T>(url: string, init?: RequestInit): Promise<T> {
   const res = await fetch(url, init);
   if (!res.ok) {
     const text = await res.text();
+    try {
+      const body = JSON.parse(text) as { detail?: string | { msg: string }[] };
+      if (typeof body.detail === "string") throw new Error(body.detail);
+      if (Array.isArray(body.detail) && body.detail[0]?.msg) {
+        throw new Error(body.detail.map((d) => d.msg).join(", "));
+      }
+    } catch (e) {
+      if (e instanceof Error && e.message !== text) throw e;
+    }
     throw new Error(text || res.statusText);
   }
   if (res.status === 204) return undefined as T;
@@ -19,7 +30,10 @@ async function request<T>(url: string, init?: RequestInit): Promise<T> {
 }
 
 export async function fetchFacets(): Promise<Facets> {
-  return request(`${API}/records/facets`);
+  const data = await request<Omit<Facets, "artist"> & { artist?: Facets["artist"] }>(
+    `${API}/records/facets`
+  );
+  return { ...data, artist: data.artist ?? [] };
 }
 
 export async function fetchRecords(params: URLSearchParams): Promise<RecordList> {
@@ -57,6 +71,7 @@ export async function parsePreview(coverKey: string): Promise<ParsePreview> {
 }
 
 export async function getSettings(): Promise<{
+  source_folder: string;
   covers_folder: string;
   animations_folder: string;
   autographs_folder: string;
@@ -88,6 +103,14 @@ export async function browseAutographsFolder(): Promise<{ path: string; selected
   return request(`${API}/settings/browse-autographs-folder`, { method: "POST" });
 }
 
+export async function browseSourceFolder(): Promise<{
+  path: string;
+  selected: boolean;
+  missing_subfolders: string[];
+}> {
+  return request(`${API}/settings/browse-source-folder`, { method: "POST" });
+}
+
 export async function uploadAutographPhoto(recordId: number, file: File): Promise<void> {
   const form = new FormData();
   form.append("file", file);
@@ -106,4 +129,12 @@ export async function browseAutographFile(
   recordId: number
 ): Promise<{ selected: boolean; has_photo: boolean }> {
   return request(`${API}/autographs/${recordId}/browse-file`, { method: "POST" });
+}
+
+export async function fetchAudioTracks(recordId: number): Promise<AudioTracksResponse> {
+  return request(`${API}/audio/${recordId}/tracks`);
+}
+
+export async function fetchArtwork(recordId: number): Promise<ArtworkListResponse> {
+  return request(`${API}/audio/${recordId}/artwork`);
 }

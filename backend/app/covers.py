@@ -3,12 +3,15 @@ from pathlib import Path
 from sqlalchemy.orm import Session
 
 from app.config import settings
+from app.media_find import IMAGE_EXTENSIONS, find_by_stem
 from app.models import AppSetting
-
-COVER_EXTENSIONS = (".jpg", ".jpeg", ".png", ".webp", ".gif", ".bmp")
+from app.source_folders import SUB_COVERS, get_subfolder
 
 
 def get_covers_folder(db: Session) -> Path | None:
+    sub = get_subfolder(db, SUB_COVERS)
+    if sub:
+        return sub
     row = db.get(AppSetting, "covers_folder")
     path_str = (row.value if row and row.value else None) or settings.covers_folder
     if not path_str:
@@ -28,18 +31,7 @@ def set_covers_folder(db: Session, path: str) -> None:
 
 
 def find_cover_path(folder: Path | None, cover_key: str) -> Path | None:
-    if not folder:
-        return None
-    for ext in COVER_EXTENSIONS:
-        candidate = folder / f"{cover_key}{ext}"
-        if candidate.is_file():
-            return candidate
-    # case-insensitive fallback
-    key_lower = cover_key.lower()
-    for f in folder.iterdir():
-        if f.is_file() and f.stem.lower() == key_lower:
-            return f
-    return None
+    return find_by_stem(folder, cover_key, IMAGE_EXTENSIONS)
 
 
 def cover_url_for(record_id: int) -> str:

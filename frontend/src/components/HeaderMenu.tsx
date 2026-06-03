@@ -7,9 +7,7 @@ interface Props {
   sortKeys: SortKey[];
   onSortChange: (keys: SortKey[]) => void;
   onThemeToggle: () => void;
-  onCoversFolder: () => void;
-  onAnimationsFolder: () => void;
-  onAutographsFolder: () => void;
+  onSourceFolder: () => void;
   onImport: () => void;
   onAddRecord: () => void;
   onRefresh: () => void;
@@ -79,22 +77,18 @@ export default function HeaderMenu({
   sortKeys,
   onSortChange,
   onThemeToggle,
-  onCoversFolder,
-  onAnimationsFolder,
-  onAutographsFolder,
+  onSourceFolder,
   onImport,
   onAddRecord,
   onRefresh,
 }: Props) {
   const [open, setOpen] = useState(false);
   const [sortExpanded, setSortExpanded] = useState(false);
-  const [foldersExpanded, setFoldersExpanded] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
   const closeMenu = () => {
     setOpen(false);
     setSortExpanded(false);
-    setFoldersExpanded(false);
   };
 
   useEffect(() => {
@@ -119,12 +113,6 @@ export default function HeaderMenu({
     </button>
   );
 
-  const subItem = (label: string, action: () => void) => (
-    <button type="button" className="menu-item menu-item-sub" onClick={() => run(action)}>
-      <span className="menu-item-label">{label}</span>
-    </button>
-  );
-
   return (
     <div className="header-menu" ref={ref}>
       <button
@@ -141,24 +129,7 @@ export default function HeaderMenu({
       {open && (
         <div className={`menu-dropdown ${sortExpanded ? "menu-dropdown-wide" : ""}`}>
           {itemWithIcon(<IconAdd />, "Add record", onAddRecord)}
-          <button
-            type="button"
-            className="menu-item menu-item-with-icon menu-item-sub-toggle"
-            onClick={() => setFoldersExpanded((e) => !e)}
-          >
-            <MenuIcon>
-              <IconFolder />
-            </MenuIcon>
-            <span className="menu-item-label">Source folders</span>
-            <span className="menu-chevron">{foldersExpanded ? "▴" : "▾"}</span>
-          </button>
-          {foldersExpanded && (
-            <div className="menu-submenu">
-              {subItem("Covers folder…", onCoversFolder)}
-              {subItem("Animations folder…", onAnimationsFolder)}
-              {subItem("Autographs folder…", onAutographsFolder)}
-            </div>
-          )}
+          {itemWithIcon(<IconFolder />, "Source folder", onSourceFolder)}
           {itemWithIcon(<IconImport />, "Import Excel", onImport)}
           {itemWithIcon(<IconRefresh />, "Refresh views", onRefresh)}
           <hr />

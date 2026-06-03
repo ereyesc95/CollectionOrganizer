@@ -3,12 +3,15 @@ from pathlib import Path
 from sqlalchemy.orm import Session
 
 from app.config import settings
+from app.media_find import VIDEO_EXTENSIONS, find_by_stem, media_files_for_tags
 from app.models import AppSetting
-
-ANIMATION_EXTENSIONS = (".mp4", ".webm", ".mov", ".m4v")
+from app.source_folders import SUB_ANIMATIONS, get_subfolder
 
 
 def get_animations_folder(db: Session) -> Path | None:
+    sub = get_subfolder(db, SUB_ANIMATIONS)
+    if sub:
+        return sub
     row = db.get(AppSetting, "animations_folder")
     path_str = (row.value if row and row.value else None) or getattr(
         settings, "animations_folder", ""
@@ -28,20 +31,17 @@ def set_animations_folder(db: Session, path: str) -> None:
     db.commit()
 
 
-def find_animation_path(folder: Path | None, cover_key: str) -> Path | None:
-    if not folder:
-        return None
-    for ext in ANIMATION_EXTENSIONS:
-        candidate = folder / f"{cover_key}{ext}"
-        if candidate.is_file():
-            return candidate
-    key_lower = cover_key.lower()
-    for f in folder.iterdir():
-        if f.is_file() and f.suffix.lower() in ANIMATION_EXTENSIONS:
-            if f.stem.lower() == key_lower:
-                return f
-    return None
+def find_animation_path(
+    folder: Path | None, cover_key: str, *, index: int = 1
+) -> Path | None:
+    return find_by_stem(folder, cover_key, VIDEO_EXTENSIONS, index=index)
 
 
-def animation_url_for(record_id: int) -> str:
-    return f"/api/animations/{record_id}"
+def animation_files_for_tags(folder: Path | None, cover_key: str, tag_count: int) -> list[bool]:
+    return media_files_for_tags(folder, cover_key, tag_count, VIDEO_EXTENSIONS)
+
+
+def animation_url_for(record_id: int, *, index: int = 1) -> str:
+    if index <= 1:
+        return f"/api/animations/{record_id}"
+    return f"/api/animations/{record_id}?index={index}"

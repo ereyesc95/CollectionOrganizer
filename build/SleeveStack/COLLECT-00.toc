@@ -2688,13 +2688,581 @@
   ('click-8.3.2.dist-info\\licenses\\LICENSE.txt',
    'C:\\Python314\\Lib\\site-packages\\click-8.3.2.dist-info\\licenses\\LICENSE.txt',
    'DATA'),
-  ('frontend\\dist\\assets\\index-BxvebwOG.css',
+  ('frontend\\dist\\assets\\ad-B18i8NGa.svg',
    'C:\\Users\\reyedu01\\AI Projects\\Collection '
-   'Organizer\\frontend\\dist\\assets\\index-BxvebwOG.css',
+   'Organizer\\frontend\\dist\\assets\\ad-B18i8NGa.svg',
    'DATA'),
-  ('frontend\\dist\\assets\\index-SgkbBydy.js',
+  ('frontend\\dist\\assets\\ad-Blhdm5jl.svg',
    'C:\\Users\\reyedu01\\AI Projects\\Collection '
-   'Organizer\\frontend\\dist\\assets\\index-SgkbBydy.js',
+   'Organizer\\frontend\\dist\\assets\\ad-Blhdm5jl.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\af-Bc2fqp73.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\af-Bc2fqp73.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\af-C77Rf6cE.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\af-C77Rf6cE.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\arab-C-KgnQEz.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\arab-C-KgnQEz.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\arab-C4CYPgyC.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\arab-C4CYPgyC.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\as-BTEVCXG-.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\as-BTEVCXG-.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\as-Dekqy8Of.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\as-Dekqy8Of.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\aw-CLCX8uk5.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\aw-CLCX8uk5.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\aw-W0PWLK5p.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\aw-W0PWLK5p.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\bm-BeYgB2z9.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\bm-BeYgB2z9.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\bm-DvNWWcPM.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\bm-DvNWWcPM.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\bn-B6T3O78g.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\bn-B6T3O78g.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\bn-CPQcA8Ol.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\bn-CPQcA8Ol.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\bo-CcUiMqkJ.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\bo-CcUiMqkJ.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\bo-Dry0C6UA.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\bo-Dry0C6UA.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\br-Cu5YU29T.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\br-Cu5YU29T.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\br-Dr5rMAMb.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\br-Dr5rMAMb.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\bt-BTo4qm10.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\bt-BTo4qm10.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\bt-SxWnbWW0.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\bt-SxWnbWW0.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\bz-BCKHR4_q.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\bz-BCKHR4_q.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\bz-CoBdB-p8.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\bz-CoBdB-p8.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\cy-DJKnEFYW.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\cy-DJKnEFYW.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\cy-bZuP8hmf.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\cy-bZuP8hmf.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\dg-CJPJrjiZ.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\dg-CJPJrjiZ.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\dg-DqkWLbnk.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\dg-DqkWLbnk.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\dm-Cbhezfe1.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\dm-Cbhezfe1.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\dm-DPPHwW2M.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\dm-DPPHwW2M.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\do-B86d445t.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\do-B86d445t.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\do-DeRnbj4d.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\do-DeRnbj4d.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\eac-CwGQsyAM.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\eac-CwGQsyAM.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\eac-h4QKADRE.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\eac-h4QKADRE.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\ec-CaVOFQ3t.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\ec-CaVOFQ3t.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\ec-cwfBJlvF.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\ec-cwfBJlvF.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\eg-DwOkwyQ0.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\eg-DwOkwyQ0.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\eg-YC70hswZ.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\eg-YC70hswZ.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\es-BuSGTZm_.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\es-BuSGTZm_.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\es-d5m8M5h8.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\es-d5m8M5h8.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\es-ga-D9xG2hYr.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\es-ga-D9xG2hYr.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\es-ga-DXhVZ333.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\es-ga-DXhVZ333.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\fj-DEAVMg38.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\fj-DEAVMg38.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\fj-u3dAPoew.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\fj-u3dAPoew.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\fk-B-RvQ4Hz.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\fk-B-RvQ4Hz.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\fk-nuUF_Ak3.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\fk-nuUF_Ak3.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\gb-nir-D4gikpNq.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\gb-nir-D4gikpNq.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\gb-nir-vEp1ZXy6.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\gb-nir-vEp1ZXy6.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\gb-wls-Bxz9hxvX.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\gb-wls-Bxz9hxvX.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\gb-wls-CK0XlKT-.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\gb-wls-CK0XlKT-.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\gq-CPnMO1hT.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\gq-CPnMO1hT.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\gq-Cag8QTk2.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\gq-Cag8QTk2.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\gs-DOgYbHsY.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\gs-DOgYbHsY.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\gs-DiiNa0F5.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\gs-DiiNa0F5.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\gt-BLpn5qMn.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\gt-BLpn5qMn.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\gt-CJo5DI-7.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\gt-CJo5DI-7.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\gu-Di1JYREk.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\gu-Di1JYREk.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\gu-SbvrH0uZ.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\gu-SbvrH0uZ.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\hr-BpiVVBoV.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\hr-BpiVVBoV.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\hr-fzLfaANM.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\hr-fzLfaANM.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\ht-DIMg4gti.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\ht-DIMg4gti.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\ht-pweRl6ZP.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\ht-pweRl6ZP.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\im--VPIqfkF.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\im--VPIqfkF.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\im-Dd9p-0-T.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\im-Dd9p-0-T.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\index-6QLpVr9F.js',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\index-6QLpVr9F.js',
+   'DATA'),
+  ('frontend\\dist\\assets\\index-D2jdWxUv.css',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\index-D2jdWxUv.css',
+   'DATA'),
+  ('frontend\\dist\\assets\\io-13HOfeJD.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\io-13HOfeJD.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\io-BImhNBcd.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\io-BImhNBcd.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\ir-Q03Mij62.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\ir-Q03Mij62.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\ir-cCIgaNf6.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\ir-cCIgaNf6.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\je-DyWbhIiC.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\je-DyWbhIiC.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\je-vXe0Dr49.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\je-vXe0Dr49.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\kg-B0FsxZiL.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\kg-B0FsxZiL.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\kg-CjfitMyT.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\kg-CjfitMyT.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\kh-BBvObpUS.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\kh-BBvObpUS.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\kh-BeWfuE30.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\kh-BeWfuE30.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\ki-fuIMkEYQ.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\ki-fuIMkEYQ.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\ki-p_fAQGbS.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\ki-p_fAQGbS.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\ky-BqaZHuhf.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\ky-BqaZHuhf.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\ky-Dpsu1myA.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\ky-Dpsu1myA.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\kz-CwKXYZ8s.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\kz-CwKXYZ8s.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\kz-Dkyx6q-p.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\kz-Dkyx6q-p.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\li-CHdhvNcr.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\li-CHdhvNcr.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\li-CMlf0YU8.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\li-CMlf0YU8.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\lk-DSQoDxn_.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\lk-DSQoDxn_.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\lk-DUkgV9Tq.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\lk-DUkgV9Tq.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\md-DRlxvNwm.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\md-DRlxvNwm.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\md-DTi94M3M.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\md-DTi94M3M.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\me-CfGorN3b.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\me-CfGorN3b.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\me-Cv4Gwqah.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\me-Cv4Gwqah.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\mp-CrOApEqW.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\mp-CrOApEqW.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\mp-CuaQmCLf.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\mp-CuaQmCLf.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\ms-B-w7hFKu.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\ms-B-w7hFKu.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\ms-DxciGbUu.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\ms-DxciGbUu.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\mt-YDa8zgzO.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\mt-YDa8zgzO.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\mt-YqzKx9xl.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\mt-YqzKx9xl.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\mx-Cc8Ccfe8.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\mx-Cc8Ccfe8.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\mx-CvCwYHGF.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\mx-CvCwYHGF.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\nf-DGrQb42O.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\nf-DGrQb42O.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\nf-Dl00mlk2.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\nf-Dl00mlk2.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\ni-BX2WCaNt.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\ni-BX2WCaNt.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\ni-CcFCSQxm.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\ni-CcFCSQxm.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\om-DcqxRdQL.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\om-DcqxRdQL.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\om-nN8zP2Bu.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\om-nN8zP2Bu.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\pn-BPAlH32D.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\pn-BPAlH32D.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\pn-DgxdtieE.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\pn-DgxdtieE.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\pt-BTevY6N2.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\pt-BTevY6N2.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\pt-DZ2ADgIR.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\pt-DZ2ADgIR.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\py-BKi5dxWt.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\py-BKi5dxWt.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\py-mNzh0mZC.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\py-mNzh0mZC.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\rs-BfwKwXtn.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\rs-BfwKwXtn.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\rs-CnTO3ehk.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\rs-CnTO3ehk.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\sa-Dh79zbT9.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\sa-Dh79zbT9.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\sa-DnlyVVKx.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\sa-DnlyVVKx.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\sh-ac-D-aE2xRW.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\sh-ac-D-aE2xRW.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\sh-ac-FjwY7RYr.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\sh-ac-FjwY7RYr.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\sh-hl-CgxUDvtv.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\sh-hl-CgxUDvtv.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\sh-hl-CqtQPzWZ.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\sh-hl-CqtQPzWZ.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\sh-ta-BFo5zkKU.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\sh-ta-BFo5zkKU.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\sh-ta-CPJublpi.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\sh-ta-CPJublpi.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\sm-BKrUHzrq.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\sm-BKrUHzrq.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\sm-DGBIRFB_.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\sm-DGBIRFB_.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\sv-CJIHhYwF.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\sv-CJIHhYwF.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\sv-RZ39q5hO.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\sv-RZ39q5hO.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\sx-RKKs0ph6.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\sx-RKKs0ph6.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\sx-nDhIaDNb.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\sx-nDhIaDNb.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\sz-D39eIL5d.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\sz-D39eIL5d.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\sz-qxMwa2gs.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\sz-qxMwa2gs.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\tc-CJHJmJj1.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\tc-CJHJmJj1.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\tc-dtelpZmc.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\tc-dtelpZmc.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\tm-C_WSgUcv.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\tm-C_WSgUcv.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\tm-DGBJvQay.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\tm-DGBJvQay.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\un-Bqg4Cbbh.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\un-Bqg4Cbbh.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\un-DabL4p35.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\un-DabL4p35.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\va-B9-hqIE-.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\va-B9-hqIE-.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\va-s7kyhqIM.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\va-s7kyhqIM.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\vg-C7xY6pic.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\vg-C7xY6pic.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\vg-ClZ-0KpG.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\vg-ClZ-0KpG.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\vi-BC_zcciE.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\vi-BC_zcciE.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\vi-BSdsyIxY.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\vi-BSdsyIxY.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\xk-Bj15g7cp.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\xk-Bj15g7cp.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\xk-Cdz2uTvR.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\xk-Cdz2uTvR.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\zm-BmsW91ne.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\zm-BmsW91ne.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\zm-D8B-0kdx.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\zm-D8B-0kdx.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\zw-CSuuaw9K.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\zw-CSuuaw9K.svg',
+   'DATA'),
+  ('frontend\\dist\\assets\\zw-U0m7oJ5e.svg',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\frontend\\dist\\assets\\zw-U0m7oJ5e.svg',
    'DATA'),
   ('frontend\\dist\\index.html',
    'C:\\Users\\reyedu01\\AI Projects\\Collection '

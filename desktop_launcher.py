@@ -59,6 +59,7 @@ def first_run_import() -> None:
 
 
 def write_phone_access_hint(port: int) -> None:
+    from app.local_host import app_url
     from app.paths import DATA_DIR, ensure_data_dir
 
     ensure_data_dir()
@@ -66,7 +67,7 @@ def write_phone_access_hint(port: int) -> None:
     lines = [
         "SleeveStack — open on your phone (same Wi-Fi)",
         "",
-        f"On this PC:  http://127.0.0.1:{port}/",
+        f"On this PC:  {app_url(port)}",
     ]
     if ip:
         lines.append(f"On your phone: http://{ip}:{port}/")
@@ -82,8 +83,10 @@ def write_phone_access_hint(port: int) -> None:
 
 
 def open_browser(port: int) -> None:
+    from app.local_host import app_url
+
     time.sleep(2.0)
-    webbrowser.open(f"http://127.0.0.1:{port}/")
+    webbrowser.open(app_url(port))
 
 
 def main() -> None:

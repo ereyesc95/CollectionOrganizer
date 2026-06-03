@@ -1,8 +1,13 @@
 import { useState, type ReactNode } from "react";
 import type { Facets, Filters } from "../types";
+import { releaseTypeFacetOptions } from "../constants/releaseTypes";
+import { CountryLabel } from "./CountryFlag";
 
 const SECTION_KEYS = [
   "media",
+  "release-type",
+  "country",
+  "genre",
   "animation",
   "canvas",
   "autograph",
@@ -24,11 +29,13 @@ function CollapsibleSection({
   title,
   sectionKey,
   forceOpen,
+  onUserToggle,
   children,
 }: {
   title: string;
   sectionKey: string;
   forceOpen: boolean | null;
+  onUserToggle?: () => void;
   children: ReactNode;
 }) {
   const storageKey = `filter-section-${sectionKey}`;
@@ -40,6 +47,7 @@ function CollapsibleSection({
   const isOpen = forceOpen !== null ? forceOpen : open;
 
   const toggle = () => {
+    onUserToggle?.();
     const next = !isOpen;
     setOpen(next);
     localStorage.setItem(storageKey, next ? "1" : "0");
@@ -60,10 +68,12 @@ function FacetCheckboxes({
   options,
   selected,
   onToggle,
+  formatOption,
 }: {
   options: { value: string; count: number }[];
   selected: string[];
   onToggle: (value: string) => void;
+  formatOption?: (value: string) => React.ReactNode;
 }) {
   return (
     <>
@@ -74,7 +84,7 @@ function FacetCheckboxes({
             checked={selected.includes(o.value)}
             onChange={() => onToggle(o.value)}
           />
-          <span>{o.value}</span>
+          <span>{formatOption ? formatOption(o.value) : o.value}</span>
           <span className="count">{o.count}</span>
         </label>
       ))}
@@ -135,7 +145,7 @@ export default function Sidebar({ facets, filters, onChange, onClear }: Props) {
     onChange({ [key]: next });
   };
 
-  const sectionProps = { forceOpen };
+  const sectionProps = { forceOpen, onUserToggle: releaseForce };
 
   return (
     <aside className="sidebar">
@@ -169,6 +179,46 @@ export default function Sidebar({ facets, filters, onChange, onClear }: Props) {
           options={facets?.media ?? []}
           selected={filters.media}
           onToggle={(v) => toggle("media", v)}
+        />
+      </CollapsibleSection>
+
+      <CollapsibleSection
+        key={`release-type-${sectionsVersion}`}
+        title="Release type"
+        sectionKey="release-type"
+        {...sectionProps}
+      >
+        <FacetCheckboxes
+          options={releaseTypeFacetOptions(facets?.release_type)}
+          selected={filters.releaseType}
+          onToggle={(v) => toggle("releaseType", v)}
+        />
+      </CollapsibleSection>
+
+      <CollapsibleSection
+        key={`country-${sectionsVersion}`}
+        title="Country"
+        sectionKey="country"
+        {...sectionProps}
+      >
+        <FacetCheckboxes
+          options={facets?.country ?? []}
+          selected={filters.country}
+          onToggle={(v) => toggle("country", v)}
+          formatOption={(v) => <CountryLabel name={v} />}
+        />
+      </CollapsibleSection>
+
+      <CollapsibleSection
+        key={`genre-${sectionsVersion}`}
+        title="Genre"
+        sectionKey="genre"
+        {...sectionProps}
+      >
+        <FacetCheckboxes
+          options={facets?.genre ?? []}
+          selected={filters.genre}
+          onToggle={(v) => toggle("genre", v)}
         />
       </CollapsibleSection>
 

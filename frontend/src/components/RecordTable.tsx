@@ -1,11 +1,41 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { Record } from "../types";
-import { albumKey, editionLabel, displayYear } from "../utils/recordDisplay";
+import {
+  animationMediaUrl,
+  canvasMediaUrl,
+  indexedMediaHasFile,
+} from "../utils/mediaUrls";
+import {
+  albumKey,
+  editionLabel,
+  editionListLabel,
+  displayRecordYear,
+  isStandardEdition,
+  sourceTagClass,
+  storedPendingTags,
+} from "../utils/recordDisplay";
+import {
+  CARD_ASSET_CONFIGS,
+  cardAssetHasFile,
+  cardAssetShouldShow,
+  cardPreviewLayout,
+  flipAssets,
+  spotifyCardConfig,
+} from "../constants/cardAssets";
+import { pendingManyTags } from "../constants/pendingTags";
+import CountryFlag from "./CountryFlag";
+import { updateRecord } from "../api";
+import CardFlipHoverPreview from "./CardFlipHoverPreview";
+import FlipAssetPreview from "./FlipAssetPreview";
+import MediaHoverPreview from "./MediaHoverPreview";
 import HoverPreview from "./HoverPreview";
+import RemovableTag from "./RemovableTag";
 
 interface Props {
   records: Record[];
   onSelect: (r: Record) => void;
+  onRefresh?: () => void;
+  onToast?: (msg: string, type: "success" | "error") => void;
 }
 
 type SortField =
@@ -13,6 +43,8 @@ type SortField =
   | "title"
   | "edition"
   | "year"
+  | "release_type"
+  | "genre"
   | "media"
   | "animation"
   | "canvas"
@@ -22,10 +54,12 @@ type SortField =
 type AlbumGroup = { key: string; items: Record[] };
 
 const COLS: { id: SortField; label: string; resizable: boolean }[] = [
-  { id: "artist", label: "Artist", resizable: true },
   { id: "title", label: "Title", resizable: true },
+  { id: "artist", label: "Artist", resizable: true },
   { id: "edition", label: "Edition", resizable: true },
   { id: "year", label: "Year", resizable: true },
+  { id: "release_type", label: "Type", resizable: true },
+  { id: "genre", label: "Genre", resizable: true },
   { id: "media", label: "Media", resizable: true },
   { id: "animation", label: "Animation", resizable: true },
   { id: "canvas", label: "Canvas", resizable: true },
@@ -38,6 +72,8 @@ const DEFAULT_WIDTHS: { [key: string]: number } = {
   title: 180,
   edition: 200,
   year: 64,
+  release_type: 110,
+  genre: 120,
   media: 88,
   animation: 110,
   canvas: 110,
@@ -64,7 +100,11 @@ function sortValue(r: Record, field: SortField): string | number {
     case "edition":
       return editionLabel(r).toLowerCase();
     case "year":
-      return displayYear(r) === "????" ? 0 : parseInt(displayYear(r), 10) || 0;
+      return displayRecordYear(r) === "????" ? 0 : parseInt(displayRecordYear(r), 10) || 0;
+    case "release_type":
+      return (r.release_type ?? "").toLowerCase();
+    case "genre":
+      return r.genre_tags.join(",").toLowerCase();
     case "media":
       return r.media_tags.join(",").toLowerCase();
     case "animation":
@@ -74,7 +114,7 @@ function sortValue(r: Record, field: SortField): string | number {
     case "autographs":
       return r.autograph_tags.join(",").toLowerCase();
     case "pending":
-      return (r.pending ?? "").toLowerCase();
+      return r.pending_tags.join(",").toLowerCase();
     default:
       return "";
   }
@@ -86,20 +126,62 @@ function compare(a: string | number, b: string | number): number {
 }
 
 function buildGroups(records: Record[]): AlbumGroup[] {
-  const result: AlbumGroup[] = [];
+  const map = new Map<string, Record[]>();
   for (const r of records) {
     const key = albumKey(r);
-    const last = result[result.length - 1];
-    if (last && last.key === key) {
-      last.items.push(r);
-    } else {
-      result.push({ key, items: [r] });
-    }
+    if (!map.has(key)) map.set(key, []);
+    map.get(key)!.push(r);
   }
-  return result;
+  for (const items of map.values()) {
+    items.sort((a, b) => {
+      if (isStandardEdition(a)) return -1;
+      if (isStandardEdition(b)) return 1;
+      return editionLabel(a).localeCompare(editionLabel(b));
+    });
+  }
+  return Array.from(map.entries()).map(([key, items]) => ({ key, items }));
 }
 
-export default function RecordTable({ records, onSelect }: Props) {
+const PORTRAIT_CFG = CARD_ASSET_CONFIGS.find((c) => c.kind === "portrait")!;
+const LANDSCAPE_CFG = CARD_ASSET_CONFIGS.find((c) => c.kind === "landscape")!;
+
+function cardsHoverEligible(record: Record): boolean {
+  return cardAssetShouldShow(record, PORTRAIT_CFG) || cardAssetShouldShow(record, LANDSCAPE_CFG);
+}
+
+function groupCardsEligible(items: Record[]): boolean {
+  return items.some(cardsHoverEligible);
+}
+
+function artistCardsHaveFiles(record: Record): boolean {
+  return (
+    cardAssetHasFile(record.assets, "portrait") || cardAssetHasFile(record.assets, "landscape")
+  );
+}
+
+function editionWithArtistCardFiles(items: Record[]): Record {
+  return items.find(artistCardsHaveFiles) ?? items[0];
+}
+
+function keyboardScrollBlocked(): boolean {
+  const active = document.activeElement;
+  if (!active) return false;
+  if (
+    active instanceof HTMLInputElement ||
+    active instanceof HTMLTextAreaElement ||
+    active instanceof HTMLSelectElement
+  ) {
+    return true;
+  }
+  if (!(active instanceof HTMLElement)) return false;
+  if (active.isContentEditable) return true;
+  return !!active.closest(
+    ".modal-overlay, .sidebar, .flip-asset-preview, .artwork-gallery-overlay"
+  );
+}
+
+export default function RecordTable({ records, onSelect, onRefresh, onToast }: Props) {
+  const [removingTag, setRemovingTag] = useState<string | null>(null);
   const [coverHover, setCoverHover] = useState<{
     src: string;
     alt: string;
@@ -110,6 +192,155 @@ export default function RecordTable({ records, onSelect }: Props) {
     alt: string;
     rect: DOMRect;
   } | null>(null);
+  const [mediaHover, setMediaHover] = useState<{
+    src: string;
+    alt: string;
+    rect: DOMRect;
+    kind: "image" | "video";
+  } | null>(null);
+  const [cardHover, setCardHover] = useState<{
+    record: Record;
+    editions: Record[];
+    rect: DOMRect;
+    session: number;
+  } | null>(null);
+  const cardHoverSession = useRef(0);
+  const [spotifyPreview, setSpotifyPreview] = useState<{
+    record: Record;
+    rect: DOMRect;
+  } | null>(null);
+  const spotifyBtnRef = useRef<HTMLButtonElement | null>(null);
+  const cardHoverTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const cardHoverPinned = useRef(false);
+  const cardHoverAnchorRef = useRef<HTMLElement | null>(null);
+  const tableScrollRef = useRef<HTMLDivElement | null>(null);
+
+  const removeListTag = useCallback(
+    async (record: Record, field: "genre_tags" | "pending_tags", tag: string) => {
+      const key = `${record.id}:${field}:${tag}`;
+      if (removingTag === key) return;
+      setRemovingTag(key);
+      try {
+        const current =
+          field === "genre_tags" ? record.genre_tags : storedPendingTags(record);
+        const next = current.filter((t) => t !== tag);
+        await updateRecord(record.id, { [field]: next });
+        onRefresh?.();
+      } catch (e) {
+        onToast?.(e instanceof Error ? e.message : "Could not remove tag", "error");
+      } finally {
+        setRemovingTag(null);
+      }
+    },
+    [removingTag, onRefresh, onToast]
+  );
+
+  const cancelCardHoverClear = () => {
+    if (cardHoverTimer.current) {
+      clearTimeout(cardHoverTimer.current);
+      cardHoverTimer.current = null;
+    }
+  };
+
+  const scheduleCardHoverClear = () => {
+    cancelCardHoverClear();
+    cardHoverTimer.current = setTimeout(() => {
+      if (!cardHoverPinned.current) {
+        setCardHover(null);
+        cardHoverAnchorRef.current = null;
+      }
+    }, 320);
+  };
+
+  const syncCardHoverAnchor = useCallback(() => {
+    const anchor = cardHoverAnchorRef.current;
+    if (!anchor) return;
+    const rect = anchor.getBoundingClientRect();
+    setCardHover((prev) => (prev ? { ...prev, rect } : null));
+  }, []);
+
+  const dismissCardHover = () => {
+    cancelCardHoverClear();
+    cardHoverPinned.current = false;
+    setCardHover(null);
+    cardHoverAnchorRef.current = null;
+  };
+
+  const openArtistCardHover = (g: AlbumGroup, anchor: HTMLElement) => {
+    cancelCardHoverClear();
+    cardHoverPinned.current = false;
+    setSpotifyPreview(null);
+    setCoverHover(null);
+    if (!groupCardsEligible(g.items)) {
+      dismissCardHover();
+      return;
+    }
+    cardHoverAnchorRef.current = anchor;
+    const rect = anchor.getBoundingClientRect();
+    const record = editionWithArtistCardFiles(g.items);
+    cardHoverSession.current += 1;
+    setCardHover({
+      record,
+      editions: g.items,
+      rect,
+      session: cardHoverSession.current,
+    });
+  };
+
+  useEffect(() => {
+    if (!cardHover) return;
+    const scroller = tableScrollRef.current;
+    scroller?.addEventListener("scroll", syncCardHoverAnchor, { passive: true });
+    window.addEventListener("resize", syncCardHoverAnchor);
+    return () => {
+      scroller?.removeEventListener("scroll", syncCardHoverAnchor);
+      window.removeEventListener("resize", syncCardHoverAnchor);
+    };
+  }, [cardHover, syncCardHoverAnchor]);
+
+  useEffect(() => {
+    const LINE = 48;
+    const onKeyDown = (e: KeyboardEvent) => {
+      const scroller = tableScrollRef.current;
+      if (!scroller || keyboardScrollBlocked()) return;
+
+      let delta = 0;
+      switch (e.key) {
+        case "ArrowDown":
+          delta = LINE;
+          break;
+        case "ArrowUp":
+          delta = -LINE;
+          break;
+        case "PageDown":
+          delta = scroller.clientHeight * 0.85;
+          break;
+        case "PageUp":
+          delta = -scroller.clientHeight * 0.85;
+          break;
+        case "Home":
+          if (e.ctrlKey || e.metaKey) {
+            scroller.scrollTop = 0;
+            e.preventDefault();
+          }
+          return;
+        case "End":
+          if (e.ctrlKey || e.metaKey) {
+            scroller.scrollTop = scroller.scrollHeight;
+            e.preventDefault();
+          }
+          return;
+        default:
+          return;
+      }
+
+      e.preventDefault();
+      scroller.scrollBy({ top: delta });
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, []);
   const [sortField, setSortField] = useState<SortField>("artist");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
   const [colWidths, setColWidths] = useState(loadWidths);
@@ -174,7 +405,22 @@ export default function RecordTable({ records, onSelect }: Props) {
 
   return (
     <>
-      <div className="table-scroll">
+      <div
+        className="table-scroll"
+        ref={tableScrollRef}
+        tabIndex={-1}
+        onMouseDown={(e) => {
+          const target = e.target as HTMLElement;
+          if (
+            target.closest(
+              "button, input, select, textarea, a, .th-sortable, .col-resizer"
+            )
+          ) {
+            return;
+          }
+          tableScrollRef.current?.focus({ preventScroll: true });
+        }}
+      >
         <table className="records-table" style={{ tableLayout: "fixed", width: "100%" }}>
           <colgroup>
             {COLS.map((c) => (
@@ -216,33 +462,119 @@ export default function RecordTable({ records, onSelect }: Props) {
                 >
                   {idx === 0 && (
                     <>
-                      <td rowSpan={g.items.length} className="cell-artist">
-                        {r.artist}
+                      <td rowSpan={g.items.length} className="cell-title">
+                        <span className="cell-title-text">{r.title}</span>
                         {g.items.length > 1 && (
-                          <span className="album-versions">{g.items.length} ver.</span>
+                          <span className="album-versions">{g.items.length} editions</span>
                         )}
                       </td>
-                      <td rowSpan={g.items.length} className="cell-title">
-                        <span
-                          className="title-hover"
-                          onMouseEnter={(e) => {
-                            if (r.has_cover && r.cover_url) {
-                              setCoverHover({
-                                src: r.cover_url,
-                                alt: r.title,
-                                rect: e.currentTarget.getBoundingClientRect(),
-                              });
-                            }
-                          }}
-                          onMouseLeave={() => setCoverHover(null)}
-                        >
-                          {r.title}
+                      <td
+                        rowSpan={g.items.length}
+                        className="cell-artist cell-artist-cards"
+                      >
+                        <span className="cell-artist-inner">
+                          {r.country_tags[0] && (
+                            <CountryFlag
+                              name={r.country_tags[0]}
+                              className="artist-flag"
+                              title={r.country_tags[0]}
+                            />
+                          )}
+                          <span
+                            className="artist-name-cards"
+                            onMouseEnter={(e) => openArtistCardHover(g, e.currentTarget)}
+                            onMouseLeave={scheduleCardHoverClear}
+                          >
+                            {r.artist}
+                          </span>
                         </span>
                       </td>
                     </>
                   )}
-                  <td className="edition-cell">{editionLabel(r)}</td>
-                  <td className="cell-year">{displayYear(r)}</td>
+                  <td className="edition-cell">
+                    <span className="edition-cell-row">
+                      {cardAssetShouldShow(r, spotifyCardConfig()) && (
+                        <button
+                          type="button"
+                          className={`list-spotify-btn ${
+                            cardAssetHasFile(r.assets, "spotify") ? "has-file" : "no-file"
+                          }`}
+                          title={
+                            cardAssetHasFile(r.assets, "spotify")
+                              ? "Spotify card — click to preview"
+                              : "Spotify card — file not found"
+                          }
+                          aria-label="Spotify card"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            if (!cardAssetHasFile(r.assets, "spotify")) return;
+                            const rect = e.currentTarget.getBoundingClientRect();
+                            dismissCardHover();
+                            if (
+                              spotifyPreview?.record.id === r.id &&
+                              spotifyPreview.rect.top === rect.top
+                            ) {
+                              setSpotifyPreview(null);
+                            } else {
+                              spotifyBtnRef.current = e.currentTarget;
+                              setSpotifyPreview({ record: r, rect });
+                            }
+                          }}
+                        >
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                            <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" strokeWidth="1.5" />
+                            <path
+                              d="M8 10.5c2.5-1 5.5-1 8 0M7.5 13c3-1 6-1 9 0M7 15.5c3.5-1 7-1 10 0"
+                              stroke="currentColor"
+                              strokeWidth="1.2"
+                              fill="none"
+                              strokeLinecap="round"
+                            />
+                          </svg>
+                        </button>
+                      )}
+                      <span
+                        className="edition-label edition-cover-hover"
+                        title={r.has_cover ? "Hover for cover" : undefined}
+                        onMouseEnter={(e) => {
+                          if (r.has_cover && r.cover_url) {
+                            setCoverHover({
+                              src: r.cover_url,
+                              alt: r.title,
+                              rect: e.currentTarget.getBoundingClientRect(),
+                            });
+                          }
+                        }}
+                        onMouseLeave={() => setCoverHover(null)}
+                      >
+                        {editionListLabel(r) || "—"}
+                        {r.edition_year != null && (
+                          <span className="edition-year-suffix"> ({r.edition_year})</span>
+                        )}
+                      </span>
+                    </span>
+                  </td>
+                  <td className="cell-year">{displayRecordYear(r)}</td>
+                  <td>
+                    {r.release_type ? (
+                      <span className="tag tag-type">{r.release_type}</span>
+                    ) : (
+                      "—"
+                    )}
+                  </td>
+                  <td className={r.genre_tags.length > 4 ? "cell-genre-many" : undefined}>
+                    {r.genre_tags.length === 0
+                      ? "—"
+                      : r.genre_tags.map((t) => (
+                          <RemovableTag
+                            key={t}
+                            label={t}
+                            className="tag-genre"
+                            busy={removingTag === `${r.id}:genre_tags:${t}`}
+                            onRemove={() => void removeListTag(r, "genre_tags", t)}
+                          />
+                        ))}
+                  </td>
                   <td>
                     {r.media_tags.map((t) => (
                       <span key={t} className="tag tag-media">
@@ -251,26 +583,64 @@ export default function RecordTable({ records, onSelect }: Props) {
                     ))}
                   </td>
                   <td>
-                    {r.animation_tags.length === 0 ? (
-                      <span className="missing-label missing-label--animation">Missing</span>
-                    ) : (
-                      r.animation_tags.map((t) => (
-                        <span key={t} className="tag">
-                          {t}
-                        </span>
-                      ))
-                    )}
+                    {r.animation_tags.length === 0
+                      ? "—"
+                      : r.animation_tags.map((t, i) => {
+                          const hasFile = indexedMediaHasFile(
+                            r.animation_files,
+                            i,
+                            r.has_animation_file
+                          );
+                          return (
+                          <span
+                            key={`${t}-${i}`}
+                            className={sourceTagClass(true, hasFile)}
+                            onMouseEnter={(e) => {
+                              if (hasFile) {
+                                setMediaHover({
+                                  src: animationMediaUrl(r.id, i + 1),
+                                  alt: t,
+                                  rect: e.currentTarget.getBoundingClientRect(),
+                                  kind: "video",
+                                });
+                              }
+                            }}
+                            onMouseLeave={() => setMediaHover(null)}
+                          >
+                            {t}
+                          </span>
+                          );
+                        })}
                   </td>
                   <td>
-                    {r.canvas_tags.length === 0 ? (
-                      <span className="missing-label missing-label--canvas">Missing</span>
-                    ) : (
-                      r.canvas_tags.map((t) => (
-                        <span key={t} className="tag">
-                          {t}
-                        </span>
-                      ))
-                    )}
+                    {r.canvas_tags.length === 0
+                      ? "—"
+                      : r.canvas_tags.map((t, i) => {
+                          const hasFile = indexedMediaHasFile(
+                            r.canvas_files,
+                            i,
+                            r.has_canvas_file
+                          );
+                          return (
+                          <span
+                            key={`${t}-${i}`}
+                            className={sourceTagClass(true, hasFile)}
+                            onMouseEnter={(e) => {
+                              if (hasFile) {
+                                setMediaHover({
+                                  src: canvasMediaUrl(r.id, i + 1),
+                                  alt: t,
+                                  rect: e.currentTarget.getBoundingClientRect(),
+                                  kind: "video",
+                                });
+                              }
+                            }}
+                            onMouseLeave={() => setMediaHover(null)}
+                          >
+                            {t}
+                          </span>
+                          );
+                        })}
                   </td>
                   <td className="autograph-cell">
                     {r.autograph_tags.length === 0 ? (
@@ -279,7 +649,7 @@ export default function RecordTable({ records, onSelect }: Props) {
                       r.autograph_tags.map((t) => (
                         <span
                           key={t}
-                          className={`tag tag-autograph ${r.has_autograph_photo ? "has-photo" : ""}`}
+                          className={`${sourceTagClass(true, r.has_autograph_photo)} tag-autograph`}
                           onMouseEnter={(e) => {
                             if (r.has_autograph_photo && r.autograph_photo_url) {
                               setAutoHover({
@@ -296,12 +666,23 @@ export default function RecordTable({ records, onSelect }: Props) {
                       ))
                     )}
                   </td>
-                  <td>
-                    {r.pending ? (
-                      <span className="tag tag-pending">{r.pending}</span>
-                    ) : (
-                      "—"
-                    )}
+                  <td
+                    className={
+                      pendingManyTags(r.pending_tags.length) ? "cell-pending-many" : undefined
+                    }
+                  >
+                    {r.pending_tags.length === 0
+                      ? "—"
+                      : r.pending_tags.map((t) => (
+                          <RemovableTag
+                            key={t}
+                            label={t}
+                            className="tag-pending"
+                            removable={t !== "Animation" && t !== "Canvas"}
+                            busy={removingTag === `${r.id}:pending_tags:${t}`}
+                            onRemove={() => void removeListTag(r, "pending_tags", t)}
+                          />
+                        ))}
                   </td>
                 </tr>
               ))
@@ -320,6 +701,46 @@ export default function RecordTable({ records, onSelect }: Props) {
         alt={autoHover?.alt ?? ""}
         anchorRect={autoHover?.rect ?? null}
         visible={!!autoHover}
+      />
+      <MediaHoverPreview
+        src={mediaHover?.src ?? ""}
+        alt={mediaHover?.alt ?? ""}
+        anchorRect={mediaHover?.rect ?? null}
+        visible={!!mediaHover}
+        kind={mediaHover?.kind ?? "image"}
+      />
+      <CardFlipHoverPreview
+        key={cardHover ? `cards-${cardHover.session}` : "cards-closed"}
+        record={cardHover?.record ?? null}
+        editions={cardHover?.editions}
+        anchorRect={cardHover?.rect ?? null}
+        visible={!!cardHover && artistCardsHaveFiles(cardHover.record)}
+        onSelectEdition={(id) => {
+          setCardHover((prev) => {
+            if (!prev) return prev;
+            const next = prev.editions.find((e) => e.id === id);
+            return next ? { ...prev, record: next } : prev;
+          });
+        }}
+        onPreviewEnter={() => {
+          cardHoverPinned.current = true;
+          cancelCardHoverClear();
+        }}
+        onPreviewLeave={() => {
+          cardHoverPinned.current = false;
+          scheduleCardHoverClear();
+        }}
+      />
+      <FlipAssetPreview
+        open={!!spotifyPreview}
+        anchorRect={spotifyPreview?.rect ?? null}
+        assets={
+          spotifyPreview ? flipAssets(spotifyPreview.record.assets, "spotify") : { front: { has_file: false, url: null }, back: { has_file: false, url: null } }
+        }
+        title="Spotify card"
+        layout={cardPreviewLayout("spotify", "list")}
+        ignoreRef={spotifyBtnRef}
+        onClose={() => setSpotifyPreview(null)}
       />
     </>
   );

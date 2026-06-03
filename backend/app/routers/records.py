@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
-from sqlalchemy.orm import Session, selectinload
+from sqlalchemy.orm import Session
 
 from app import crud
 from app.database import get_db
 from app.models import Record
-from app.parse_album import parse_album
+from app.parse_album import build_cover_key, parse_album
 from app.schemas import (
     FacetsOut,
     ParsePreview,
@@ -30,6 +30,9 @@ def list_records(
     animation: str = Query(""),
     canvas: str = Query(""),
     autograph: str = Query(""),
+    release_type: str = Query(""),
+    genre: str = Query(""),
+    country: str = Query(""),
     pending: str = Query(""),
     has_autograph: str | None = None,
     has_animation: str | None = None,
@@ -56,6 +59,9 @@ def list_records(
         animation=split_param(animation) or None,
         canvas=split_param(canvas) or None,
         autograph=split_param(autograph) or None,
+        release_type=split_param(release_type) or None,
+        genre=split_param(genre) or None,
+        country=split_param(country) or None,
         pending=split_param(pending) or None,
         has_autograph=tri_bool(has_autograph),
         has_animation=tri_bool(has_animation),
@@ -90,17 +96,7 @@ def parse_preview(cover_key: str = Query(...)):
 
 @router.get("/{record_id}", response_model=RecordOut)
 def get_record(record_id: int, db: Session = Depends(get_db)):
-    record = (
-        db.query(Record)
-        .options(
-            selectinload(Record.media_tags),
-            selectinload(Record.animation_tags),
-            selectinload(Record.canvas_tags),
-            selectinload(Record.autograph_tags),
-        )
-        .filter(Record.id == record_id)
-        .first()
-    )
+    record = crud.get_record(db, record_id)
     if not record:
         raise HTTPException(404, "Record not found")
     return crud.record_to_out(db, record)
@@ -108,22 +104,49 @@ def get_record(record_id: int, db: Session = Depends(get_db)):
 
 @router.post("", response_model=RecordOut, status_code=201)
 def create_record(data: RecordCreate, db: Session = Depends(get_db)):
-    existing = db.query(Record).filter(Record.cover_key == data.cover_key.strip()).first()
+    try:
+        cover_key = build_cover_key(
+            data.artist,
+            data.record_year,
+            data.title,
+            data.edition_year,
+            data.edition_title,
+        )
+    except ValueError as e:
+        raise HTTPException(400, str(e)) from e
+    existing = db.query(Record).filter(Record.cover_key == cover_key).first()
     if existing:
-        raise HTTPException(400, "A record with this cover key already exists")
+        raise HTTPException(400, "A record with this album/edition already exists")
     record = crud.create_record(db, data)
     return crud.record_to_out(db, record)
 
 
 @router.patch("/{record_id}", response_model=RecordOut)
 def update_record(record_id: int, data: RecordUpdate, db: Session = Depends(get_db)):
-    record = db.get(Record, record_id)
+    record = crud.get_record(db, record_id)
     if not record:
         raise HTTPException(404, "Record not found")
-    if data.cover_key and data.cover_key != record.cover_key:
-        dup = db.query(Record).filter(Record.cover_key == data.cover_key).first()
-        if dup:
-            raise HTTPException(400, "Cover key already in use")
+    artist = data.artist.strip() if data.artist is not None else record.artist
+    title = data.title.strip() if data.title is not None else record.title
+    record_year = data.record_year if data.record_year is not None else record.record_year
+    edition_year = (
+        data.edition_year if data.edition_year is not None else record.edition_year
+    )
+    edition_title = (
+        data.edition_title.strip() if data.edition_title is not None else record.edition_title
+    )
+    if data.edition_title is not None and not edition_title:
+        edition_title = None
+    try:
+        new_key = build_cover_key(
+            artist, record_year, title, edition_year, edition_title
+        )
+    except ValueError as e:
+        raise HTTPException(400, str(e)) from e
+    if new_key != record.cover_key:
+        dup = db.query(Record).filter(Record.cover_key == new_key).first()
+        if dup and dup.id != record.id:
+            raise HTTPException(400, "Another record already uses this album/edition")
     record = crud.update_record(db, record, data)
     return crud.record_to_out(db, record)
 

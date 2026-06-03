@@ -1,10 +1,4 @@
-import {
-  useEffect,
-  useRef,
-  useState,
-  type CSSProperties,
-  type RefObject,
-} from "react";
+import { useEffect, useRef, useState, type CSSProperties, type RefObject } from "react";
 import { createPortal } from "react-dom";
 
 interface Props {
@@ -25,20 +19,31 @@ export default function AutographPreviewBubble({
   onClose,
 }: Props) {
   const bubbleRef = useRef<HTMLDivElement>(null);
-  const [style, setStyle] = useState<CSSProperties>({});
+  const [style, setStyle] = useState<CSSProperties>({ visibility: "hidden" });
 
   useEffect(() => {
-    if (!open || !anchorRect) return;
-    const w = 200;
-    const h = photoSrc ? 220 : 100;
-    let left = anchorRect.left + anchorRect.width / 2 - w / 2;
-    let top = anchorRect.top - h - 8;
-    if (top < 8) {
-      top = anchorRect.bottom + 8;
+    if (!open || !anchorRect || !bubbleRef.current) {
+      setStyle({ visibility: "hidden" });
+      return;
     }
-    left = Math.max(8, Math.min(left, window.innerWidth - w - 8));
-    top = Math.max(8, Math.min(top, window.innerHeight - h - 8));
-    setStyle({ left, top, width: w, minHeight: photoSrc ? h : undefined });
+
+    const update = () => {
+      const el = bubbleRef.current;
+      if (!el || !anchorRect) return;
+      const { width, height } = el.getBoundingClientRect();
+      if (width < 1) return;
+      let left = anchorRect.left + anchorRect.width / 2 - width / 2;
+      let top = anchorRect.top - height - 8;
+      if (top < 8) top = anchorRect.bottom + 8;
+      left = Math.max(8, Math.min(left, window.innerWidth - width - 8));
+      top = Math.max(8, Math.min(top, window.innerHeight - height - 8));
+      setStyle({ left, top, visibility: "visible" });
+    };
+
+    update();
+    const ro = new ResizeObserver(update);
+    ro.observe(bubbleRef.current);
+    return () => ro.disconnect();
   }, [open, anchorRect, photoSrc]);
 
   useEffect(() => {
@@ -57,7 +62,7 @@ export default function AutographPreviewBubble({
   return createPortal(
     <div
       ref={bubbleRef}
-      className="autograph-preview-bubble"
+      className="autograph-preview-bubble autograph-preview-bubble--fit"
       style={style}
       onClick={(e) => e.stopPropagation()}
     >

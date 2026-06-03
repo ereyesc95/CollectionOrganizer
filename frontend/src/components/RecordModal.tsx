@@ -1,16 +1,21 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   createRecord,
   deleteAutographPhoto,
   deleteRecord,
   fetchRecord,
-  parsePreview,
   updateRecord,
   uploadAutographPhoto,
 } from "../api";
-import type { Facets, ParsePreview, Record } from "../types";
+import type { Facets, Record } from "../types";
 import ImageLightbox from "./ImageLightbox";
-import { ValuePickerMulti, ValuePickerSingle } from "./ValuePicker";
+import { ValuePickerMulti, ValuePickerSearchSelect, ValuePickerSingle } from "./ValuePicker";
+import { RELEASE_TYPES } from "../constants/releaseTypes";
+import { CountryLabel } from "./CountryFlag";
+import { countryNames } from "../constants/countries";
+import { DEFAULT_PENDING_TAGS, pendingTagOptions } from "../constants/pendingTags";
+import { buildCoverKey } from "../utils/coverKey";
+import { storedPendingTags } from "../utils/recordDisplay";
 
 interface Props {
   record: Record | null;
@@ -24,19 +29,29 @@ function facetValues(facets: Facets | null, key: keyof Facets): string[] {
   return facets?.[key]?.map((o) => o.value) ?? [];
 }
 
+function parseYearInput(value: string): number | null {
+  const v = value.trim();
+  if (!v) return null;
+  const n = parseInt(v, 10);
+  return Number.isNaN(n) ? null : n;
+}
+
 export default function RecordModal({ record, isNew, facets, onClose, onSaved }: Props) {
-  const [coverKey, setCoverKey] = useState(record?.cover_key ?? "");
   const [artist, setArtist] = useState(record?.artist ?? "");
   const [recordYear, setRecordYear] = useState(record?.record_year?.toString() ?? "");
   const [title, setTitle] = useState(record?.title ?? "");
   const [editionYear, setEditionYear] = useState(record?.edition_year?.toString() ?? "");
   const [editionTitle, setEditionTitle] = useState(record?.edition_title ?? "");
-  const [pending, setPending] = useState(record?.pending ?? "");
+  const [pendingTags, setPendingTags] = useState<string[]>(
+    record ? storedPendingTags(record) : [...DEFAULT_PENDING_TAGS]
+  );
   const [mediaTags, setMediaTags] = useState<string[]>(record?.media_tags ?? ["LP"]);
   const [animationTags, setAnimationTags] = useState<string[]>(record?.animation_tags ?? []);
   const [canvasTags, setCanvasTags] = useState<string[]>(record?.canvas_tags ?? []);
   const [autographTags, setAutographTags] = useState<string[]>(record?.autograph_tags ?? []);
-  const [preview, setPreview] = useState<ParsePreview | null>(null);
+  const [releaseType, setReleaseType] = useState(record?.release_type ?? "");
+  const [genreTags, setGenreTags] = useState<string[]>(record?.genre_tags ?? []);
+  const [countryTags, setCountryTags] = useState<string[]>(record?.country_tags ?? []);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [hasAutographPhoto, setHasAutographPhoto] = useState(record?.has_autograph_photo ?? false);
@@ -49,64 +64,88 @@ export default function RecordModal({ record, isNew, facets, onClose, onSaved }:
   const fileInputRef = useRef<HTMLInputElement>(null);
   const recordId = record?.id;
 
+  const coverKeyPreview = useMemo(() => {
+    try {
+      return buildCoverKey(
+        artist,
+        parseYearInput(recordYear),
+        title,
+        parseYearInput(editionYear),
+        editionTitle
+      );
+    } catch {
+      return null;
+    }
+  }, [artist, recordYear, title, editionYear, editionTitle]);
+
+  const countryOptions = useMemo(() => {
+    const set = new Set([...countryNames(), ...facetValues(facets, "country"), ...countryTags]);
+    return Array.from(set).sort((a, b) => a.localeCompare(b));
+  }, [facets, countryTags]);
+
+  const topCountryOptions = useMemo(
+    () => (facets?.country ?? []).slice(0, 3).map((o) => o.value),
+    [facets]
+  );
+
+  const artistOptions = useMemo(() => {
+    const fromFacets = facetValues(facets, "artist");
+    const known = new Set(fromFacets.map((a) => a.toLowerCase()));
+    const trimmed = artist.trim();
+    if (trimmed && !known.has(trimmed.toLowerCase())) {
+      return [...fromFacets, trimmed];
+    }
+    return fromFacets;
+  }, [facets, artist]);
+
   useEffect(() => {
     if (!record) return;
-    setCoverKey(record.cover_key);
     setArtist(record.artist);
     setRecordYear(record.record_year?.toString() ?? "");
     setTitle(record.title);
     setEditionYear(record.edition_year?.toString() ?? "");
     setEditionTitle(record.edition_title ?? "");
-    setPending(record.pending ?? "");
+    setPendingTags(storedPendingTags(record));
     setMediaTags(record.media_tags);
     setAnimationTags(record.animation_tags);
     setCanvasTags(record.canvas_tags);
     setAutographTags(record.autograph_tags);
+    setReleaseType(record.release_type ?? "");
+    setGenreTags(record.genre_tags);
+    setCountryTags(record.country_tags);
     setHasAutographPhoto(record.has_autograph_photo);
     setAutographUrl(record.autograph_photo_url);
     setAutographSource(record.autograph_photo_source);
     setPendingPhoto(null);
     setPendingPhotoPreview(null);
-    setPreview(null);
     setError("");
     setPhotoVersion((v) => v + 1);
   }, [record]);
 
-  useEffect(() => {
-    if (!isNew || coverKey.length < 5) return;
-    const t = setTimeout(() => {
-      parsePreview(coverKey)
-        .then((p) => {
-          setPreview(p);
-          if (!artist) setArtist(p.artist);
-          if (!recordYear && p.record_year) setRecordYear(String(p.record_year));
-          if (!title) setTitle(p.title);
-          if (!editionYear && p.edition_year) setEditionYear(String(p.edition_year));
-          if (!editionTitle && p.edition_title) setEditionTitle(p.edition_title);
-        })
-        .catch(() => setPreview(null));
-    }, 400);
-    return () => clearTimeout(t);
-  }, [coverKey, isNew, artist, title, recordYear, editionYear, editionTitle]);
-
   const buildBody = () => ({
-    cover_key: coverKey.trim(),
     artist: artist.trim(),
-    record_year: recordYear ? parseInt(recordYear, 10) : null,
+    record_year: parseYearInput(recordYear),
     title: title.trim(),
-    edition_year: editionYear ? parseInt(editionYear, 10) : null,
+    edition_year: parseYearInput(editionYear),
     edition_title: editionTitle.trim() || null,
-    pending: pending.trim() || null,
+    pending_tags: pendingTags,
     media_tags: mediaTags,
     animation_tags: animationTags,
     canvas_tags: canvasTags,
     autograph_tags: autographTags,
+    release_type: releaseType.trim() || null,
+    genre_tags: genreTags,
+    country_tags: countryTags,
   });
 
   const handleSave = async () => {
     setSaving(true);
     setError("");
     try {
+      if (!artist.trim() || !title.trim()) {
+        setError("Artist and title are required");
+        return;
+      }
       if (isNew) {
         const created = await createRecord(buildBody());
         if (pendingPhoto && autographTags.length) {
@@ -190,30 +229,40 @@ export default function RecordModal({ record, isNew, facets, onClose, onSaved }:
   const hasPhoto = !!(hasAutographPhoto || pendingPhotoPreview);
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal" onClick={(e) => e.stopPropagation()}>
+    <div
+      className="modal-overlay"
+      onMouseDown={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+    >
+      <div className="modal" onMouseDown={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <h2>{isNew ? "Add record" : "Edit record"}</h2>
-          <button type="button" className="btn btn-ghost" onClick={onClose}>
-            Close
+          <button
+            type="button"
+            className="modal-close"
+            onClick={onClose}
+            aria-label="Close"
+          >
+            ×
           </button>
         </div>
         <div className="modal-body">
-          <div className="form-row">
-            <label>Album / cover key (exact filename stem)</label>
-            <textarea value={coverKey} onChange={(e) => setCoverKey(e.target.value)} rows={2} />
-          </div>
-          {preview && (
-            <div className="parse-preview">
-              Parsed: {preview.artist}, {preview.record_year}. {preview.title}
-              {preview.edition_year && ` — ${preview.edition_year} ${preview.edition_title}`}
-            </div>
+          {coverKeyPreview && (
+            <p className="cover-key-preview">
+              Media files match: <code>{coverKeyPreview}</code>
+            </p>
           )}
           <div className="form-grid">
-            <div className="form-row">
-              <label>Artist</label>
-              <input value={artist} onChange={(e) => setArtist(e.target.value)} />
-            </div>
+            <ValuePickerSearchSelect
+              className="form-grid-cell"
+              label="Artist"
+              value={artist}
+              options={artistOptions}
+              onChange={setArtist}
+              allowEmpty={false}
+              allowCustom
+            />
             <div className="form-row">
               <label>Year</label>
               <input value={recordYear} onChange={(e) => setRecordYear(e.target.value)} type="number" />
@@ -223,59 +272,79 @@ export default function RecordModal({ record, isNew, facets, onClose, onSaved }:
               <input value={title} onChange={(e) => setTitle(e.target.value)} />
             </div>
             <div className="form-row">
-              <label>Edition year</label>
-              <input value={editionYear} onChange={(e) => setEditionYear(e.target.value)} type="number" />
-            </div>
-            <div className="form-row">
               <label>Edition title</label>
               <input value={editionTitle} onChange={(e) => setEditionTitle(e.target.value)} />
             </div>
+            <div className="form-row">
+              <label>Edition year</label>
+              <input value={editionYear} onChange={(e) => setEditionYear(e.target.value)} type="number" />
+            </div>
           </div>
+          <ValuePickerSearchSelect
+            label="Country"
+            value={countryTags[0] ?? ""}
+            options={countryOptions}
+            pinnedOptions={topCountryOptions}
+            onChange={(v) => setCountryTags(v ? [v] : [])}
+            formatOption={(v) => <CountryLabel name={v} />}
+          />
+          <ValuePickerMulti
+            label="Genre"
+            values={genreTags}
+            options={facetValues(facets, "genre")}
+            onChange={setGenreTags}
+            searchable
+          />
+          <ValuePickerSingle
+            label="Release type"
+            value={releaseType}
+            options={[...RELEASE_TYPES]}
+            onChange={setReleaseType}
+          />
           <ValuePickerMulti
             label="Media type"
-            kind="media"
             values={mediaTags}
             options={facetValues(facets, "media")}
             onChange={setMediaTags}
           />
           <ValuePickerMulti
             label="Animation"
-            kind="animation"
             values={animationTags}
             options={facetValues(facets, "animation")}
             onChange={setAnimationTags}
           />
           <ValuePickerMulti
             label="Canvas"
-            kind="canvas"
             values={canvasTags}
             options={facetValues(facets, "canvas")}
             onChange={setCanvasTags}
           />
           <ValuePickerMulti
             label="Autographs"
-            kind="autograph"
             values={autographTags}
             options={facetValues(facets, "autograph")}
             onChange={setAutographTags}
           />
-          <ValuePickerSingle
+          <ValuePickerMulti
             label="Pending"
-            kind="pending"
-            value={pending}
-            options={[
-              ...facetValues(facets, "pending"),
-              "Spotify Code",
-              "Everything",
-            ]}
-            onChange={setPending}
+            values={pendingTags}
+            options={pendingTagOptions(facetValues(facets, "pending"))}
+            onChange={setPendingTags}
           />
+          {(animationTags.length === 0 || canvasTags.length === 0) && (
+            <p className="pending-derived-hint">
+              {animationTags.length === 0 && "Animation "}
+              {animationTags.length === 0 && canvasTags.length === 0 && "and "}
+              {canvasTags.length === 0 && "Canvas "}
+              appear in Pending automatically when those tags are missing.
+            </p>
+          )}
           {showAutographPhoto && (
             <div className="form-row autograph-photo-section">
               <label>Autograph photo</label>
               <p className="autograph-photo-hint">
-                Photos in your autographs folder are used automatically (matched by cover key).
-                Upload below only when you need a custom image from another source.
+                Photos in your autographs folder are matched automatically from artist, title, and
+                edition above.
               </p>
               {hasPhoto && autographSource && !pendingPhotoPreview && (
                 <p className="autograph-photo-source">
@@ -285,6 +354,17 @@ export default function RecordModal({ record, isNew, facets, onClose, onSaved }:
                 </p>
               )}
               <div className="autograph-photo-row">
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  hidden
+                  onChange={(e) => {
+                    const f = e.target.files?.[0];
+                    if (f) handlePhotoUpload(f);
+                    e.target.value = "";
+                  }}
+                />
                 {hasPhoto && thumbSrc ? (
                   <button
                     type="button"
@@ -295,29 +375,18 @@ export default function RecordModal({ record, isNew, facets, onClose, onSaved }:
                     <img src={thumbSrc} alt="Autograph" />
                   </button>
                 ) : (
-                  <div className="autograph-thumb empty">No photo</div>
-                )}
-                <div className="autograph-photo-actions">
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept="image/*"
-                    hidden
-                    onChange={(e) => {
-                      const f = e.target.files?.[0];
-                      if (f) handlePhotoUpload(f);
-                      e.target.value = "";
-                    }}
-                  />
                   <button
                     type="button"
-                    className="btn btn-ghost"
+                    className="autograph-thumb empty"
                     onClick={() => fileInputRef.current?.click()}
                     disabled={saving}
+                    title="Click to upload a custom autograph photo"
                   >
-                    {autographSource === "upload" ? "Replace custom photo" : "Upload custom photo"}
+                    No photo
                   </button>
-                  {autographSource === "upload" && (
+                )}
+                {autographSource === "upload" && (
+                  <div className="autograph-photo-actions">
                     <button
                       type="button"
                       className="btn btn-ghost"
@@ -326,8 +395,8 @@ export default function RecordModal({ record, isNew, facets, onClose, onSaved }:
                     >
                       Remove custom photo
                     </button>
-                  )}
-                </div>
+                  </div>
+                )}
               </div>
             </div>
           )}
@@ -345,9 +414,6 @@ export default function RecordModal({ record, isNew, facets, onClose, onSaved }:
               Delete
             </button>
           )}
-          <button type="button" className="btn btn-ghost" onClick={onClose}>
-            Cancel
-          </button>
           <button type="button" className="btn btn-primary" onClick={handleSave} disabled={saving}>
             {saving ? "Saving…" : "Save"}
           </button>

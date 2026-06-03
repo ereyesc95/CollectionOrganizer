@@ -31,6 +31,7 @@ imports:
  &#8226;   <a href="#app.database">app.database</a>
  &#8226;   <a href="#app.folder_dialog">app.folder_dialog</a>
  &#8226;   <a href="#app.import_excel">app.import_excel</a>
+ &#8226;   <a href="#app.local_host">app.local_host</a>
  &#8226;   <a href="#app.main">app.main</a>
  &#8226;   <a href="#app.models">app.models</a>
  &#8226;   <a href="#app.parse_album">app.parse_album</a>
@@ -424,6 +425,7 @@ imported by:
  &#8226;   <a href="#anyio.streams.tls">anyio.streams.tls</a>
  &#8226;   <a href="#anyio.to_thread">anyio.to_thread</a>
  &#8226;   <a href="#app.database">app.database</a>
+ &#8226;   <a href="#app.release_types">app.release_types</a>
  &#8226;   <a href="#asyncio.base_events">asyncio.base_events</a>
  &#8226;   <a href="#asyncio.coroutines">asyncio.coroutines</a>
  &#8226;   <a href="#click._compat">click._compat</a>
@@ -3548,14 +3550,21 @@ imported by:
  &#8226;   <a href="#anyio.streams.stapled">anyio.streams.stapled</a>
  &#8226;   <a href="#anyio.streams.tls">anyio.streams.tls</a>
  &#8226;   <a href="#anyio.to_thread">anyio.to_thread</a>
+ &#8226;   <a href="#app.audio_files">app.audio_files</a>
+ &#8226;   <a href="#app.card_files">app.card_files</a>
  &#8226;   <a href="#app.crud">app.crud</a>
  &#8226;   <a href="#app.folder_dialog">app.folder_dialog</a>
  &#8226;   <a href="#app.frontend_static">app.frontend_static</a>
  &#8226;   <a href="#app.import_excel">app.import_excel</a>
+ &#8226;   <a href="#app.media_find">app.media_find</a>
  &#8226;   <a href="#app.models">app.models</a>
  &#8226;   <a href="#app.parse_album">app.parse_album</a>
  &#8226;   <a href="#app.paths">app.paths</a>
+ &#8226;   <a href="#app.pending_tags">app.pending_tags</a>
+ &#8226;   <a href="#app.record_assets">app.record_assets</a>
+ &#8226;   <a href="#app.release_types">app.release_types</a>
  &#8226;   <a href="#app.schemas">app.schemas</a>
+ &#8226;   <a href="#app.source_folders">app.source_folders</a>
  &#8226;   <a href="#click">click</a>
  &#8226;   <a href="#click._compat">click._compat</a>
  &#8226;   <a href="#click._termui_impl">click._termui_impl</a>
@@ -7236,7 +7245,10 @@ imports:
   <div class="import">
 imported by:
     <a href="#app.animations">app.animations</a>
+ &#8226;   <a href="#app.audio_files">app.audio_files</a>
  &#8226;   <a href="#app.autographs">app.autographs</a>
+ &#8226;   <a href="#app.canvas_files">app.canvas_files</a>
+ &#8226;   <a href="#app.card_files">app.card_files</a>
  &#8226;   <a href="#app.config">app.config</a>
  &#8226;   <a href="#app.covers">app.covers</a>
  &#8226;   <a href="#app.crud">app.crud</a>
@@ -7244,14 +7256,20 @@ imported by:
  &#8226;   <a href="#app.folder_dialog">app.folder_dialog</a>
  &#8226;   <a href="#app.frontend_static">app.frontend_static</a>
  &#8226;   <a href="#app.import_excel">app.import_excel</a>
+ &#8226;   <a href="#app.local_host">app.local_host</a>
  &#8226;   <a href="#app.main">app.main</a>
+ &#8226;   <a href="#app.media_find">app.media_find</a>
  &#8226;   <a href="#app.media_response">app.media_response</a>
  &#8226;   <a href="#app.models">app.models</a>
  &#8226;   <a href="#app.parse_album">app.parse_album</a>
  &#8226;   <a href="#app.paths">app.paths</a>
+ &#8226;   <a href="#app.pending_tags">app.pending_tags</a>
+ &#8226;   <a href="#app.record_assets">app.record_assets</a>
+ &#8226;   <a href="#app.release_types">app.release_types</a>
  &#8226;   <a href="#app.routers">app.routers</a>
  &#8226;   <a href="#app.routers.records">app.routers.records</a>
  &#8226;   <a href="#app.schemas">app.schemas</a>
+ &#8226;   <a href="#app.source_folders">app.source_folders</a>
  &#8226;   <a href="#desktop_launcher.py">desktop_launcher.py</a>
 
   </div>
@@ -7265,7 +7283,9 @@ imported by:
 imports:
     <a href="#app">app</a>
  &#8226;   <a href="#app.config">app.config</a>
+ &#8226;   <a href="#app.media_find">app.media_find</a>
  &#8226;   <a href="#app.models">app.models</a>
+ &#8226;   <a href="#app.source_folders">app.source_folders</a>
  &#8226;   <a href="#pathlib">pathlib</a>
  &#8226;   <a href="#sqlalchemy.orm">sqlalchemy.orm</a>
 
@@ -7282,14 +7302,40 @@ imported by:
 </div>
 
 <div class="node">
+  <a name="app.audio_files"></a>
+  <a target="code" href="///C:/Users/reyedu01/AI%20Projects/Collection%20Organizer/backend/app/audio_files.py" type="text/plain"><tt>app.audio_files</tt></a>
+<span class="moduletype">SourceModule</span>  <div class="import">
+imports:
+    <a href="#__future__">__future__</a>
+ &#8226;   <a href="#app">app</a>
+ &#8226;   <a href="#app.media_find">app.media_find</a>
+ &#8226;   <a href="#app.models">app.models</a>
+ &#8226;   <a href="#app.source_folders">app.source_folders</a>
+ &#8226;   <a href="#dataclasses">dataclasses</a>
+ &#8226;   <a href="#pathlib">pathlib</a>
+ &#8226;   <a href="#re">re</a>
+ &#8226;   <a href="#sqlalchemy.orm">sqlalchemy.orm</a>
+
+  </div>
+  <div class="import">
+imported by:
+    <a href="#app.routers.audio">app.routers.audio</a>
+
+  </div>
+
+</div>
+
+<div class="node">
   <a name="app.autographs"></a>
   <a target="code" href="///C:/Users/reyedu01/AI%20Projects/Collection%20Organizer/backend/app/autographs.py" type="text/plain"><tt>app.autographs</tt></a>
 <span class="moduletype">SourceModule</span>  <div class="import">
 imports:
     <a href="#app">app</a>
  &#8226;   <a href="#app.config">app.config</a>
+ &#8226;   <a href="#app.media_find">app.media_find</a>
  &#8226;   <a href="#app.models">app.models</a>
  &#8226;   <a href="#app.paths">app.paths</a>
+ &#8226;   <a href="#app.source_folders">app.source_folders</a>
  &#8226;   <a href="#pathlib">pathlib</a>
  &#8226;   <a href="#shutil">shutil</a>
  &#8226;   <a href="#sqlalchemy.orm">sqlalchemy.orm</a>
@@ -7302,6 +7348,51 @@ imported by:
  &#8226;   <a href="#app.routers.autographs">app.routers.autographs</a>
  &#8226;   <a href="#app.routers.settings">app.routers.settings</a>
  &#8226;   <a href="#desktop_launcher.py">desktop_launcher.py</a>
+
+  </div>
+
+</div>
+
+<div class="node">
+  <a name="app.canvas_files"></a>
+  <a target="code" href="///C:/Users/reyedu01/AI%20Projects/Collection%20Organizer/backend/app/canvas_files.py" type="text/plain"><tt>app.canvas_files</tt></a>
+<span class="moduletype">SourceModule</span>  <div class="import">
+imports:
+    <a href="#app">app</a>
+ &#8226;   <a href="#app.media_find">app.media_find</a>
+ &#8226;   <a href="#app.source_folders">app.source_folders</a>
+ &#8226;   <a href="#pathlib">pathlib</a>
+ &#8226;   <a href="#sqlalchemy.orm">sqlalchemy.orm</a>
+
+  </div>
+  <div class="import">
+imported by:
+    <a href="#app.crud">app.crud</a>
+ &#8226;   <a href="#app.record_assets">app.record_assets</a>
+ &#8226;   <a href="#app.routers.canvas">app.routers.canvas</a>
+
+  </div>
+
+</div>
+
+<div class="node">
+  <a name="app.card_files"></a>
+  <a target="code" href="///C:/Users/reyedu01/AI%20Projects/Collection%20Organizer/backend/app/card_files.py" type="text/plain"><tt>app.card_files</tt></a>
+<span class="moduletype">SourceModule</span>  <div class="import">
+imports:
+    <a href="#__future__">__future__</a>
+ &#8226;   <a href="#app">app</a>
+ &#8226;   <a href="#app.media_find">app.media_find</a>
+ &#8226;   <a href="#app.source_folders">app.source_folders</a>
+ &#8226;   <a href="#pathlib">pathlib</a>
+ &#8226;   <a href="#sqlalchemy.orm">sqlalchemy.orm</a>
+ &#8226;   <a href="#typing">typing</a>
+
+  </div>
+  <div class="import">
+imported by:
+    <a href="#app.record_assets">app.record_assets</a>
+ &#8226;   <a href="#app.routers.cards">app.routers.cards</a>
 
   </div>
 
@@ -7337,7 +7428,9 @@ imported by:
 imports:
     <a href="#app">app</a>
  &#8226;   <a href="#app.config">app.config</a>
+ &#8226;   <a href="#app.media_find">app.media_find</a>
  &#8226;   <a href="#app.models">app.models</a>
+ &#8226;   <a href="#app.source_folders">app.source_folders</a>
  &#8226;   <a href="#pathlib">pathlib</a>
  &#8226;   <a href="#sqlalchemy.orm">sqlalchemy.orm</a>
 
@@ -7362,9 +7455,13 @@ imports:
  &#8226;   <a href="#app">app</a>
  &#8226;   <a href="#app.animations">app.animations</a>
  &#8226;   <a href="#app.autographs">app.autographs</a>
+ &#8226;   <a href="#app.canvas_files">app.canvas_files</a>
  &#8226;   <a href="#app.covers">app.covers</a>
  &#8226;   <a href="#app.models">app.models</a>
  &#8226;   <a href="#app.parse_album">app.parse_album</a>
+ &#8226;   <a href="#app.pending_tags">app.pending_tags</a>
+ &#8226;   <a href="#app.record_assets">app.record_assets</a>
+ &#8226;   <a href="#app.release_types">app.release_types</a>
  &#8226;   <a href="#app.schemas">app.schemas</a>
  &#8226;   <a href="#sqlalchemy">sqlalchemy</a>
  &#8226;   <a href="#sqlalchemy.orm">sqlalchemy.orm</a>
@@ -7372,7 +7469,8 @@ imports:
   </div>
   <div class="import">
 imported by:
-    <a href="#app.import_excel">app.import_excel</a>
+    <a href="#app.database">app.database</a>
+ &#8226;   <a href="#app.import_excel">app.import_excel</a>
  &#8226;   <a href="#app.routers.records">app.routers.records</a>
  &#8226;   <a href="#desktop_launcher.py">desktop_launcher.py</a>
 
@@ -7388,7 +7486,9 @@ imports:
     <a href="#'collections.abc'">'collections.abc'</a>
  &#8226;   <a href="#app">app</a>
  &#8226;   <a href="#app.config">app.config</a>
+ &#8226;   <a href="#app.crud">app.crud</a>
  &#8226;   <a href="#app.models">app.models</a>
+ &#8226;   <a href="#app.pending_tags">app.pending_tags</a>
  &#8226;   <a href="#sqlalchemy">sqlalchemy</a>
  &#8226;   <a href="#sqlalchemy.orm">sqlalchemy.orm</a>
 
@@ -7398,7 +7498,10 @@ imported by:
     <a href="#app.main">app.main</a>
  &#8226;   <a href="#app.models">app.models</a>
  &#8226;   <a href="#app.routers.animations">app.routers.animations</a>
+ &#8226;   <a href="#app.routers.audio">app.routers.audio</a>
  &#8226;   <a href="#app.routers.autographs">app.routers.autographs</a>
+ &#8226;   <a href="#app.routers.canvas">app.routers.canvas</a>
+ &#8226;   <a href="#app.routers.cards">app.routers.cards</a>
  &#8226;   <a href="#app.routers.covers">app.routers.covers</a>
  &#8226;   <a href="#app.routers.import_router">app.routers.import_router</a>
  &#8226;   <a href="#app.routers.records">app.routers.records</a>
@@ -7461,6 +7564,7 @@ imports:
  &#8226;   <a href="#app.crud">app.crud</a>
  &#8226;   <a href="#app.models">app.models</a>
  &#8226;   <a href="#app.parse_album">app.parse_album</a>
+ &#8226;   <a href="#app.pending_tags">app.pending_tags</a>
  &#8226;   <a href="#app.schemas">app.schemas</a>
  &#8226;   <a href="#openpyxl">openpyxl</a>
  &#8226;   <a href="#pathlib">pathlib</a>
@@ -7477,6 +7581,23 @@ imported by:
 </div>
 
 <div class="node">
+  <a name="app.local_host"></a>
+  <a target="code" href="///C:/Users/reyedu01/AI%20Projects/Collection%20Organizer/backend/app/local_host.py" type="text/plain"><tt>app.local_host</tt></a>
+<span class="moduletype">SourceModule</span>  <div class="import">
+imports:
+    <a href="#app">app</a>
+
+  </div>
+  <div class="import">
+imported by:
+    <a href="#app.main">app.main</a>
+ &#8226;   <a href="#desktop_launcher.py">desktop_launcher.py</a>
+
+  </div>
+
+</div>
+
+<div class="node">
   <a name="app.main"></a>
   <a target="code" href="///C:/Users/reyedu01/AI%20Projects/Collection%20Organizer/backend/app/main.py" type="text/plain"><tt>app.main</tt></a>
 <span class="moduletype">SourceModule</span>  <div class="import">
@@ -7485,10 +7606,14 @@ imports:
  &#8226;   <a href="#app.config">app.config</a>
  &#8226;   <a href="#app.database">app.database</a>
  &#8226;   <a href="#app.frontend_static">app.frontend_static</a>
+ &#8226;   <a href="#app.local_host">app.local_host</a>
  &#8226;   <a href="#app.paths">app.paths</a>
  &#8226;   <a href="#app.routers">app.routers</a>
  &#8226;   <a href="#app.routers.animations">app.routers.animations</a>
+ &#8226;   <a href="#app.routers.audio">app.routers.audio</a>
  &#8226;   <a href="#app.routers.autographs">app.routers.autographs</a>
+ &#8226;   <a href="#app.routers.canvas">app.routers.canvas</a>
+ &#8226;   <a href="#app.routers.cards">app.routers.cards</a>
  &#8226;   <a href="#app.routers.covers">app.routers.covers</a>
  &#8226;   <a href="#app.routers.import_router">app.routers.import_router</a>
  &#8226;   <a href="#app.routers.records">app.routers.records</a>
@@ -7508,6 +7633,29 @@ imported by:
 </div>
 
 <div class="node">
+  <a name="app.media_find"></a>
+  <a target="code" href="///C:/Users/reyedu01/AI%20Projects/Collection%20Organizer/backend/app/media_find.py" type="text/plain"><tt>app.media_find</tt></a>
+<span class="moduletype">SourceModule</span>  <div class="import">
+imports:
+    <a href="#__future__">__future__</a>
+ &#8226;   <a href="#app">app</a>
+ &#8226;   <a href="#pathlib">pathlib</a>
+
+  </div>
+  <div class="import">
+imported by:
+    <a href="#app.animations">app.animations</a>
+ &#8226;   <a href="#app.audio_files">app.audio_files</a>
+ &#8226;   <a href="#app.autographs">app.autographs</a>
+ &#8226;   <a href="#app.canvas_files">app.canvas_files</a>
+ &#8226;   <a href="#app.card_files">app.card_files</a>
+ &#8226;   <a href="#app.covers">app.covers</a>
+
+  </div>
+
+</div>
+
+<div class="node">
   <a name="app.media_response"></a>
   <a target="code" href="///C:/Users/reyedu01/AI%20Projects/Collection%20Organizer/backend/app/media_response.py" type="text/plain"><tt>app.media_response</tt></a>
 <span class="moduletype">SourceModule</span>  <div class="import">
@@ -7520,6 +7668,9 @@ imports:
   <div class="import">
 imported by:
     <a href="#app.routers.animations">app.routers.animations</a>
+ &#8226;   <a href="#app.routers.audio">app.routers.audio</a>
+ &#8226;   <a href="#app.routers.canvas">app.routers.canvas</a>
+ &#8226;   <a href="#app.routers.cards">app.routers.cards</a>
  &#8226;   <a href="#app.routers.covers">app.routers.covers</a>
 
   </div>
@@ -7543,15 +7694,22 @@ imports:
 imported by:
     <a href="#app">app</a>
  &#8226;   <a href="#app.animations">app.animations</a>
+ &#8226;   <a href="#app.audio_files">app.audio_files</a>
  &#8226;   <a href="#app.autographs">app.autographs</a>
  &#8226;   <a href="#app.covers">app.covers</a>
  &#8226;   <a href="#app.crud">app.crud</a>
  &#8226;   <a href="#app.database">app.database</a>
  &#8226;   <a href="#app.import_excel">app.import_excel</a>
+ &#8226;   <a href="#app.pending_tags">app.pending_tags</a>
+ &#8226;   <a href="#app.record_assets">app.record_assets</a>
  &#8226;   <a href="#app.routers.animations">app.routers.animations</a>
+ &#8226;   <a href="#app.routers.audio">app.routers.audio</a>
  &#8226;   <a href="#app.routers.autographs">app.routers.autographs</a>
+ &#8226;   <a href="#app.routers.canvas">app.routers.canvas</a>
+ &#8226;   <a href="#app.routers.cards">app.routers.cards</a>
  &#8226;   <a href="#app.routers.covers">app.routers.covers</a>
  &#8226;   <a href="#app.routers.records">app.routers.records</a>
+ &#8226;   <a href="#app.source_folders">app.source_folders</a>
  &#8226;   <a href="#desktop_launcher.py">desktop_launcher.py</a>
 
   </div>
@@ -7604,13 +7762,76 @@ imported by:
 </div>
 
 <div class="node">
+  <a name="app.pending_tags"></a>
+  <a target="code" href="///C:/Users/reyedu01/AI%20Projects/Collection%20Organizer/backend/app/pending_tags.py" type="text/plain"><tt>app.pending_tags</tt></a>
+<span class="moduletype">SourceModule</span>  <div class="import">
+imports:
+    <a href="#__future__">__future__</a>
+ &#8226;   <a href="#app">app</a>
+ &#8226;   <a href="#app.models">app.models</a>
+
+  </div>
+  <div class="import">
+imported by:
+    <a href="#app.crud">app.crud</a>
+ &#8226;   <a href="#app.database">app.database</a>
+ &#8226;   <a href="#app.import_excel">app.import_excel</a>
+
+  </div>
+
+</div>
+
+<div class="node">
+  <a name="app.record_assets"></a>
+  <a target="code" href="///C:/Users/reyedu01/AI%20Projects/Collection%20Organizer/backend/app/record_assets.py" type="text/plain"><tt>app.record_assets</tt></a>
+<span class="moduletype">SourceModule</span>  <div class="import">
+imports:
+    <a href="#__future__">__future__</a>
+ &#8226;   <a href="#app">app</a>
+ &#8226;   <a href="#app.canvas_files">app.canvas_files</a>
+ &#8226;   <a href="#app.card_files">app.card_files</a>
+ &#8226;   <a href="#app.models">app.models</a>
+ &#8226;   <a href="#app.schemas">app.schemas</a>
+ &#8226;   <a href="#sqlalchemy.orm">sqlalchemy.orm</a>
+
+  </div>
+  <div class="import">
+imported by:
+    <a href="#app.crud">app.crud</a>
+
+  </div>
+
+</div>
+
+<div class="node">
+  <a name="app.release_types"></a>
+  <a target="code" href="///C:/Users/reyedu01/AI%20Projects/Collection%20Organizer/backend/app/release_types.py" type="text/plain"><tt>app.release_types</tt></a>
+<span class="moduletype">SourceModule</span>  <div class="import">
+imports:
+    <a href="#'collections.abc'">'collections.abc'</a>
+ &#8226;   <a href="#__future__">__future__</a>
+ &#8226;   <a href="#app">app</a>
+
+  </div>
+  <div class="import">
+imported by:
+    <a href="#app.crud">app.crud</a>
+
+  </div>
+
+</div>
+
+<div class="node">
   <a name="app.routers"></a>
   <a target="code" href="///C:/Users/reyedu01/AI%20Projects/Collection%20Organizer/backend/app/routers/__init__.py" type="text/plain"><tt>app.routers</tt></a>
 <span class="moduletype">Package</span>  <div class="import">
 imports:
     <a href="#app">app</a>
  &#8226;   <a href="#app.routers.animations">app.routers.animations</a>
+ &#8226;   <a href="#app.routers.audio">app.routers.audio</a>
  &#8226;   <a href="#app.routers.autographs">app.routers.autographs</a>
+ &#8226;   <a href="#app.routers.canvas">app.routers.canvas</a>
+ &#8226;   <a href="#app.routers.cards">app.routers.cards</a>
  &#8226;   <a href="#app.routers.covers">app.routers.covers</a>
  &#8226;   <a href="#app.routers.import_router">app.routers.import_router</a>
  &#8226;   <a href="#app.routers.records">app.routers.records</a>
@@ -7621,7 +7842,10 @@ imports:
 imported by:
     <a href="#app.main">app.main</a>
  &#8226;   <a href="#app.routers.animations">app.routers.animations</a>
+ &#8226;   <a href="#app.routers.audio">app.routers.audio</a>
  &#8226;   <a href="#app.routers.autographs">app.routers.autographs</a>
+ &#8226;   <a href="#app.routers.canvas">app.routers.canvas</a>
+ &#8226;   <a href="#app.routers.cards">app.routers.cards</a>
  &#8226;   <a href="#app.routers.covers">app.routers.covers</a>
  &#8226;   <a href="#app.routers.import_router">app.routers.import_router</a>
  &#8226;   <a href="#app.routers.records">app.routers.records</a>
@@ -7656,6 +7880,30 @@ imported by:
 </div>
 
 <div class="node">
+  <a name="app.routers.audio"></a>
+  <a target="code" href="///C:/Users/reyedu01/AI%20Projects/Collection%20Organizer/backend/app/routers/audio.py" type="text/plain"><tt>app.routers.audio</tt></a>
+<span class="moduletype">SourceModule</span>  <div class="import">
+imports:
+    <a href="#app.audio_files">app.audio_files</a>
+ &#8226;   <a href="#app.database">app.database</a>
+ &#8226;   <a href="#app.media_response">app.media_response</a>
+ &#8226;   <a href="#app.models">app.models</a>
+ &#8226;   <a href="#app.routers">app.routers</a>
+ &#8226;   <a href="#app.schemas">app.schemas</a>
+ &#8226;   <a href="#fastapi">fastapi</a>
+ &#8226;   <a href="#sqlalchemy.orm">sqlalchemy.orm</a>
+
+  </div>
+  <div class="import">
+imported by:
+    <a href="#app.main">app.main</a>
+ &#8226;   <a href="#app.routers">app.routers</a>
+
+  </div>
+
+</div>
+
+<div class="node">
   <a name="app.routers.autographs"></a>
   <a target="code" href="///C:/Users/reyedu01/AI%20Projects/Collection%20Organizer/backend/app/routers/autographs.py" type="text/plain"><tt>app.routers.autographs</tt></a>
 <span class="moduletype">SourceModule</span>  <div class="import">
@@ -7676,6 +7924,52 @@ imported by:
     <a href="#app.main">app.main</a>
  &#8226;   <a href="#app.routers">app.routers</a>
  &#8226;   <a href="#desktop_launcher.py">desktop_launcher.py</a>
+
+  </div>
+
+</div>
+
+<div class="node">
+  <a name="app.routers.canvas"></a>
+  <a target="code" href="///C:/Users/reyedu01/AI%20Projects/Collection%20Organizer/backend/app/routers/canvas.py" type="text/plain"><tt>app.routers.canvas</tt></a>
+<span class="moduletype">SourceModule</span>  <div class="import">
+imports:
+    <a href="#app.canvas_files">app.canvas_files</a>
+ &#8226;   <a href="#app.database">app.database</a>
+ &#8226;   <a href="#app.media_response">app.media_response</a>
+ &#8226;   <a href="#app.models">app.models</a>
+ &#8226;   <a href="#app.routers">app.routers</a>
+ &#8226;   <a href="#fastapi">fastapi</a>
+ &#8226;   <a href="#sqlalchemy.orm">sqlalchemy.orm</a>
+
+  </div>
+  <div class="import">
+imported by:
+    <a href="#app.main">app.main</a>
+ &#8226;   <a href="#app.routers">app.routers</a>
+
+  </div>
+
+</div>
+
+<div class="node">
+  <a name="app.routers.cards"></a>
+  <a target="code" href="///C:/Users/reyedu01/AI%20Projects/Collection%20Organizer/backend/app/routers/cards.py" type="text/plain"><tt>app.routers.cards</tt></a>
+<span class="moduletype">SourceModule</span>  <div class="import">
+imports:
+    <a href="#app.card_files">app.card_files</a>
+ &#8226;   <a href="#app.database">app.database</a>
+ &#8226;   <a href="#app.media_response">app.media_response</a>
+ &#8226;   <a href="#app.models">app.models</a>
+ &#8226;   <a href="#app.routers">app.routers</a>
+ &#8226;   <a href="#fastapi">fastapi</a>
+ &#8226;   <a href="#sqlalchemy.orm">sqlalchemy.orm</a>
+
+  </div>
+  <div class="import">
+imported by:
+    <a href="#app.main">app.main</a>
+ &#8226;   <a href="#app.routers">app.routers</a>
 
   </div>
 
@@ -7768,9 +8062,8 @@ imports:
  &#8226;   <a href="#app.folder_dialog">app.folder_dialog</a>
  &#8226;   <a href="#app.routers">app.routers</a>
  &#8226;   <a href="#app.schemas">app.schemas</a>
+ &#8226;   <a href="#app.source_folders">app.source_folders</a>
  &#8226;   <a href="#fastapi">fastapi</a>
- &#8226;   <a href="#pydantic">pydantic</a>
- &#8226;   <a href="#pydantic.BaseModel">pydantic.BaseModel</a>
  &#8226;   <a href="#sqlalchemy.orm">sqlalchemy.orm</a>
 
   </div>
@@ -7800,10 +8093,38 @@ imports:
 imported by:
     <a href="#app.crud">app.crud</a>
  &#8226;   <a href="#app.import_excel">app.import_excel</a>
+ &#8226;   <a href="#app.record_assets">app.record_assets</a>
+ &#8226;   <a href="#app.routers.audio">app.routers.audio</a>
  &#8226;   <a href="#app.routers.import_router">app.routers.import_router</a>
  &#8226;   <a href="#app.routers.records">app.routers.records</a>
  &#8226;   <a href="#app.routers.settings">app.routers.settings</a>
  &#8226;   <a href="#desktop_launcher.py">desktop_launcher.py</a>
+
+  </div>
+
+</div>
+
+<div class="node">
+  <a name="app.source_folders"></a>
+  <a target="code" href="///C:/Users/reyedu01/AI%20Projects/Collection%20Organizer/backend/app/source_folders.py" type="text/plain"><tt>app.source_folders</tt></a>
+<span class="moduletype">SourceModule</span>  <div class="import">
+imports:
+    <a href="#__future__">__future__</a>
+ &#8226;   <a href="#app">app</a>
+ &#8226;   <a href="#app.models">app.models</a>
+ &#8226;   <a href="#pathlib">pathlib</a>
+ &#8226;   <a href="#sqlalchemy.orm">sqlalchemy.orm</a>
+
+  </div>
+  <div class="import">
+imported by:
+    <a href="#app.animations">app.animations</a>
+ &#8226;   <a href="#app.audio_files">app.audio_files</a>
+ &#8226;   <a href="#app.autographs">app.autographs</a>
+ &#8226;   <a href="#app.canvas_files">app.canvas_files</a>
+ &#8226;   <a href="#app.card_files">app.card_files</a>
+ &#8226;   <a href="#app.covers">app.covers</a>
+ &#8226;   <a href="#app.routers.settings">app.routers.settings</a>
 
   </div>
 
@@ -11203,6 +11524,7 @@ imported by:
  &#8226;   <a href="#anyio.streams.memory">anyio.streams.memory</a>
  &#8226;   <a href="#anyio.streams.stapled">anyio.streams.stapled</a>
  &#8226;   <a href="#anyio.streams.tls">anyio.streams.tls</a>
+ &#8226;   <a href="#app.audio_files">app.audio_files</a>
  &#8226;   <a href="#app.parse_album">app.parse_album</a>
  &#8226;   <a href="#asyncio.graph">asyncio.graph</a>
  &#8226;   <a href="#fastapi._compat.shared">fastapi._compat.shared</a>
@@ -14947,7 +15269,10 @@ imported by:
     <a href="#app.frontend_static">app.frontend_static</a>
  &#8226;   <a href="#app.main">app.main</a>
  &#8226;   <a href="#app.routers.animations">app.routers.animations</a>
+ &#8226;   <a href="#app.routers.audio">app.routers.audio</a>
  &#8226;   <a href="#app.routers.autographs">app.routers.autographs</a>
+ &#8226;   <a href="#app.routers.canvas">app.routers.canvas</a>
+ &#8226;   <a href="#app.routers.cards">app.routers.cards</a>
  &#8226;   <a href="#app.routers.covers">app.routers.covers</a>
  &#8226;   <a href="#app.routers.import_router">app.routers.import_router</a>
  &#8226;   <a href="#app.routers.records">app.routers.records</a>
@@ -32560,15 +32885,20 @@ imported by:
     <a href="#_pyrepl.terminfo">_pyrepl.terminfo</a>
  &#8226;   <a href="#anyio._core._fileio">anyio._core._fileio</a>
  &#8226;   <a href="#app.animations">app.animations</a>
+ &#8226;   <a href="#app.audio_files">app.audio_files</a>
  &#8226;   <a href="#app.autographs">app.autographs</a>
+ &#8226;   <a href="#app.canvas_files">app.canvas_files</a>
+ &#8226;   <a href="#app.card_files">app.card_files</a>
  &#8226;   <a href="#app.covers">app.covers</a>
  &#8226;   <a href="#app.frontend_static">app.frontend_static</a>
  &#8226;   <a href="#app.import_excel">app.import_excel</a>
  &#8226;   <a href="#app.main">app.main</a>
+ &#8226;   <a href="#app.media_find">app.media_find</a>
  &#8226;   <a href="#app.media_response">app.media_response</a>
  &#8226;   <a href="#app.paths">app.paths</a>
  &#8226;   <a href="#app.routers.autographs">app.routers.autographs</a>
  &#8226;   <a href="#app.routers.import_router">app.routers.import_router</a>
+ &#8226;   <a href="#app.source_folders">app.source_folders</a>
  &#8226;   <a href="#click._termui_impl">click._termui_impl</a>
  &#8226;   <a href="#desktop_launcher.py">desktop_launcher.py</a>
  &#8226;   <a href="#dotenv.main">dotenv.main</a>
@@ -33136,8 +33466,7 @@ imports:
   </div>
   <div class="import">
 imported by:
-    <a href="#app.routers.settings">app.routers.settings</a>
- &#8226;   <a href="#app.schemas">app.schemas</a>
+    <a href="#app.schemas">app.schemas</a>
  &#8226;   <a href="#desktop_launcher.py">desktop_launcher.py</a>
  &#8226;   <a href="#fastapi._compat.shared">fastapi._compat.shared</a>
  &#8226;   <a href="#fastapi._compat.v2">fastapi._compat.v2</a>
@@ -33216,8 +33545,7 @@ imported by:
   <a target="code" href="" type="text/plain"><tt>pydantic.BaseModel</tt></a>
 <span class="moduletype">MissingModule</span>  <div class="import">
 imported by:
-    <a href="#app.routers.settings">app.routers.settings</a>
- &#8226;   <a href="#app.schemas">app.schemas</a>
+    <a href="#app.schemas">app.schemas</a>
  &#8226;   <a href="#fastapi._compat.shared">fastapi._compat.shared</a>
  &#8226;   <a href="#fastapi._compat.v2">fastapi._compat.v2</a>
  &#8226;   <a href="#fastapi.dependencies.utils">fastapi.dependencies.utils</a>
@@ -37969,6 +38297,7 @@ imported by:
  &#8226;   <a href="#_sre">_sre</a>
  &#8226;   <a href="#_strptime">_strptime</a>
  &#8226;   <a href="#anyio.streams.tls">anyio.streams.tls</a>
+ &#8226;   <a href="#app.audio_files">app.audio_files</a>
  &#8226;   <a href="#app.parse_album">app.parse_album</a>
  &#8226;   <a href="#argparse">argparse</a>
  &#8226;   <a href="#ast">ast</a>
@@ -46347,18 +46676,26 @@ imports:
   <div class="import">
 imported by:
     <a href="#app.animations">app.animations</a>
+ &#8226;   <a href="#app.audio_files">app.audio_files</a>
  &#8226;   <a href="#app.autographs">app.autographs</a>
+ &#8226;   <a href="#app.canvas_files">app.canvas_files</a>
+ &#8226;   <a href="#app.card_files">app.card_files</a>
  &#8226;   <a href="#app.covers">app.covers</a>
  &#8226;   <a href="#app.crud">app.crud</a>
  &#8226;   <a href="#app.database">app.database</a>
  &#8226;   <a href="#app.import_excel">app.import_excel</a>
  &#8226;   <a href="#app.models">app.models</a>
+ &#8226;   <a href="#app.record_assets">app.record_assets</a>
  &#8226;   <a href="#app.routers.animations">app.routers.animations</a>
+ &#8226;   <a href="#app.routers.audio">app.routers.audio</a>
  &#8226;   <a href="#app.routers.autographs">app.routers.autographs</a>
+ &#8226;   <a href="#app.routers.canvas">app.routers.canvas</a>
+ &#8226;   <a href="#app.routers.cards">app.routers.cards</a>
  &#8226;   <a href="#app.routers.covers">app.routers.covers</a>
  &#8226;   <a href="#app.routers.import_router">app.routers.import_router</a>
  &#8226;   <a href="#app.routers.records">app.routers.records</a>
  &#8226;   <a href="#app.routers.settings">app.routers.settings</a>
+ &#8226;   <a href="#app.source_folders">app.source_folders</a>
  &#8226;   <a href="#sqlalchemy">sqlalchemy</a>
  &#8226;   <a href="#sqlalchemy.ext.asyncio.session">sqlalchemy.ext.asyncio.session</a>
  &#8226;   <a href="#sqlalchemy.ext.baked">sqlalchemy.ext.baked</a>
@@ -53446,6 +53783,7 @@ imported by:
  &#8226;   <a href="#anyio.streams.tls">anyio.streams.tls</a>
  &#8226;   <a href="#anyio.to_thread">anyio.to_thread</a>
  &#8226;   <a href="#app.autographs">app.autographs</a>
+ &#8226;   <a href="#app.card_files">app.card_files</a>
  &#8226;   <a href="#click._compat">click._compat</a>
  &#8226;   <a href="#click._termui_impl">click._termui_impl</a>
  &#8226;   <a href="#click._utils">click._utils</a>

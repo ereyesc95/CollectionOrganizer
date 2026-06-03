@@ -1,4 +1,4 @@
-# SleeveStack
+# RecordStack
 
 Desktop-ready app to manage your vinyl and CD collection: import from Excel, filter by media/animation/canvas/autographs, browse as list or cover grid, and add new records to SQLite.
 
@@ -51,7 +51,7 @@ cd ..
 python run.py
 ```
 
-Opens http://127.0.0.1:8000 with API + built UI.
+Opens **http://recordstack.localhost:8000** with API + built UI (friendly local name; no domain purchase). `127.0.0.1` still works. Optional shorter name: run `setup-local-url.ps1` as Administrator for **http://recordstack.local:8000**.
 
 ## Features
 

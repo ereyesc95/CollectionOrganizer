@@ -59,7 +59,8 @@ def import_from_xlsx(db: Session, path: Path, *, replace: bool = False) -> Impor
         animation_tags = split_tags(cell(anim_c))
         canvas_tags = split_tags(cell(canvas_c))
         autograph_tags = split_tags(cell(auto_c))
-        pending = cell(pending_c)
+        pending_raw = cell(pending_c)
+        pending_tags = split_tags(pending_raw)
 
         existing = db.query(Record).filter(Record.cover_key == cover_key).first()
         if existing:
@@ -68,19 +69,27 @@ def import_from_xlsx(db: Session, path: Path, *, replace: bool = False) -> Impor
             existing.title = parsed.title
             existing.edition_year = parsed.edition_year
             existing.edition_title = parsed.edition_title
-            existing.pending = pending
             from app.crud import _set_tags
             from app.models import (
                 RecordAnimationTag,
                 RecordAutographTag,
                 RecordCanvasTag,
                 RecordMediaTag,
+                RecordPendingTag,
             )
+            from app.pending_tags import normalize_stored_pending
 
             _set_tags(db, existing, RecordMediaTag, "media_tags", media_tags)
             _set_tags(db, existing, RecordAnimationTag, "animation_tags", animation_tags)
             _set_tags(db, existing, RecordCanvasTag, "canvas_tags", canvas_tags)
             _set_tags(db, existing, RecordAutographTag, "autograph_tags", autograph_tags)
+            _set_tags(
+                db,
+                existing,
+                RecordPendingTag,
+                "pending_tags",
+                normalize_stored_pending(pending_tags),
+            )
             db.commit()
             updated += 1
             continue
@@ -95,7 +104,7 @@ def import_from_xlsx(db: Session, path: Path, *, replace: bool = False) -> Impor
                     title=parsed.title,
                     edition_year=parsed.edition_year,
                     edition_title=parsed.edition_title,
-                    pending=pending,
+                    pending_tags=normalize_stored_pending(pending_tags),
                     media_tags=media_tags,
                     animation_tags=animation_tags,
                     canvas_tags=canvas_tags,

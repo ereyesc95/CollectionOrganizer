@@ -411,9 +411,21 @@
    'C:\\Users\\reyedu01\\AI Projects\\Collection '
    'Organizer\\backend\\app\\animations.py',
    'PYMODULE'),
+  ('app.audio_files',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\backend\\app\\audio_files.py',
+   'PYMODULE'),
   ('app.autographs',
    'C:\\Users\\reyedu01\\AI Projects\\Collection '
    'Organizer\\backend\\app\\autographs.py',
+   'PYMODULE'),
+  ('app.canvas_files',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\backend\\app\\canvas_files.py',
+   'PYMODULE'),
+  ('app.card_files',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\backend\\app\\card_files.py',
    'PYMODULE'),
   ('app.config',
    'C:\\Users\\reyedu01\\AI Projects\\Collection '
@@ -443,9 +455,17 @@
    'C:\\Users\\reyedu01\\AI Projects\\Collection '
    'Organizer\\backend\\app\\import_excel.py',
    'PYMODULE'),
+  ('app.local_host',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\backend\\app\\local_host.py',
+   'PYMODULE'),
   ('app.main',
    'C:\\Users\\reyedu01\\AI Projects\\Collection '
    'Organizer\\backend\\app\\main.py',
+   'PYMODULE'),
+  ('app.media_find',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\backend\\app\\media_find.py',
    'PYMODULE'),
   ('app.media_response',
    'C:\\Users\\reyedu01\\AI Projects\\Collection '
@@ -463,6 +483,18 @@
    'C:\\Users\\reyedu01\\AI Projects\\Collection '
    'Organizer\\backend\\app\\paths.py',
    'PYMODULE'),
+  ('app.pending_tags',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\backend\\app\\pending_tags.py',
+   'PYMODULE'),
+  ('app.record_assets',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\backend\\app\\record_assets.py',
+   'PYMODULE'),
+  ('app.release_types',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\backend\\app\\release_types.py',
+   'PYMODULE'),
   ('app.routers',
    'C:\\Users\\reyedu01\\AI Projects\\Collection '
    'Organizer\\backend\\app\\routers\\__init__.py',
@@ -471,9 +503,21 @@
    'C:\\Users\\reyedu01\\AI Projects\\Collection '
    'Organizer\\backend\\app\\routers\\animations.py',
    'PYMODULE'),
+  ('app.routers.audio',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\backend\\app\\routers\\audio.py',
+   'PYMODULE'),
   ('app.routers.autographs',
    'C:\\Users\\reyedu01\\AI Projects\\Collection '
    'Organizer\\backend\\app\\routers\\autographs.py',
+   'PYMODULE'),
+  ('app.routers.canvas',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\backend\\app\\routers\\canvas.py',
+   'PYMODULE'),
+  ('app.routers.cards',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\backend\\app\\routers\\cards.py',
    'PYMODULE'),
   ('app.routers.covers',
    'C:\\Users\\reyedu01\\AI Projects\\Collection '
@@ -494,6 +538,10 @@
   ('app.schemas',
    'C:\\Users\\reyedu01\\AI Projects\\Collection '
    'Organizer\\backend\\app\\schemas.py',
+   'PYMODULE'),
+  ('app.source_folders',
+   'C:\\Users\\reyedu01\\AI Projects\\Collection '
+   'Organizer\\backend\\app\\source_folders.py',
    'PYMODULE'),
   ('argparse', 'C:\\Python314\\Lib\\argparse.py', 'PYMODULE'),
   ('ast', 'C:\\Python314\\Lib\\ast.py', 'PYMODULE'),

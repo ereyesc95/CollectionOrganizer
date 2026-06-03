@@ -5,17 +5,21 @@ from typing import Literal
 from sqlalchemy.orm import Session
 
 from app.config import settings
+from app.media_find import IMAGE_EXTENSIONS, find_by_stem
 from app.models import AppSetting
 from app.paths import DATA_DIR, ensure_data_dir
+from app.source_folders import SUB_AUTOGRAPHS, get_subfolder
 
 ensure_data_dir()
 UPLOADS_DIR = DATA_DIR / "autographs"
 
-PHOTO_EXTENSIONS = (".jpg", ".jpeg", ".png", ".webp", ".gif", ".bmp")
 AutographSource = Literal["folder", "upload"]
 
 
 def get_autographs_folder(db: Session) -> Path | None:
+    sub = get_subfolder(db, SUB_AUTOGRAPHS)
+    if sub:
+        return sub
     row = db.get(AppSetting, "autographs_folder")
     path_str = (row.value if row and row.value else None) or settings.autographs_folder
     if not path_str:
@@ -35,16 +39,7 @@ def set_autographs_folder(db: Session, path: str) -> None:
 
 
 def _find_in_folder(folder: Path, stem: str) -> Path | None:
-    for ext in PHOTO_EXTENSIONS:
-        candidate = folder / f"{stem}{ext}"
-        if candidate.is_file():
-            return candidate
-    key_lower = stem.lower()
-    for f in folder.iterdir():
-        if f.is_file() and f.suffix.lower() in PHOTO_EXTENSIONS:
-            if f.stem.lower() == key_lower:
-                return f
-    return None
+    return find_by_stem(folder, stem, IMAGE_EXTENSIONS)
 
 
 def find_uploaded_autograph(record_id: int) -> Path | None:

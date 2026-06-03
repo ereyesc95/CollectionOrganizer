@@ -1,13 +1,12 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import {
-  browseAnimationsFolder,
-  browseAutographsFolder,
-  browseCoversFolder,
+  browseSourceFolder,
   fetchFacets,
   fetchRecords,
   importExcel,
 } from "./api";
-import AppIcon from "./components/AppIcon";
+import AppIcon, { faviconHref } from "./components/AppIcon";
+import FiltersToggleIcon from "./components/FiltersToggleIcon";
 import HeaderMenu from "./components/HeaderMenu";
 import RecordGrid from "./components/RecordGrid";
 import RecordModal from "./components/RecordModal";
@@ -15,8 +14,9 @@ import RecordTable from "./components/RecordTable";
 import Sidebar from "./components/Sidebar";
 import ViewToggle from "./components/ViewToggle";
 import type { Facets, Filters, Record, SortKey, ViewMode } from "./types";
+import { normalizeRecord } from "./utils/normalizeRecord";
 
-const APP_NAME = "SleeveStack";
+const APP_NAME = "RecordStack";
 
 const DEFAULT_SORT: SortKey[] = [
   { field: "artist", order: "asc" },
@@ -40,6 +40,9 @@ const defaultFilters: Filters = {
   canvas: [],
   autograph: [],
   pending: [],
+  releaseType: [],
+  genre: [],
+  country: [],
   hasAutograph: "",
   hasAnimation: "",
   hasCanvas: "",
@@ -56,6 +59,9 @@ function buildParams(filters: Filters): URLSearchParams {
   if (filters.canvas.length) p.set("canvas", filters.canvas.join(","));
   if (filters.autograph.length) p.set("autograph", filters.autograph.join(","));
   if (filters.pending.length) p.set("pending", filters.pending.join(","));
+  if (filters.releaseType.length) p.set("release_type", filters.releaseType.join(","));
+  if (filters.genre.length) p.set("genre", filters.genre.join(","));
+  if (filters.country.length) p.set("country", filters.country.join(","));
   if (filters.hasAutograph) p.set("has_autograph", filters.hasAutograph === "yes" ? "true" : "false");
   if (filters.hasAnimation) p.set("has_animation", filters.hasAnimation === "yes" ? "true" : "false");
   if (filters.hasCanvas) p.set("has_canvas", filters.hasCanvas === "yes" ? "true" : "false");
@@ -76,6 +82,11 @@ function initialSidebarOpen(): boolean {
   }
 }
 
+function scrollContainer(main: HTMLElement | null): HTMLElement | null {
+  if (!main) return null;
+  return main.querySelector<HTMLElement>(".table-scroll") ?? main;
+}
+
 export default function App() {
   const [facets, setFacets] = useState<Facets | null>(null);
   const [records, setRecords] = useState<Record[]>([]);
@@ -93,36 +104,65 @@ export default function App() {
     (localStorage.getItem("theme") as "dark" | "light") || "dark"
   );
   const [refreshKey, setRefreshKey] = useState(0);
+  const mainRef = useRef<HTMLElement>(null);
+  const restoreScrollRef = useRef<number | null>(null);
 
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
     localStorage.setItem("theme", theme);
+    const link = document.querySelector<HTMLLinkElement>('link[rel="icon"]');
+    if (link) link.href = faviconHref(theme);
   }, [theme]);
+
+  useEffect(() => {
+    for (const key of Object.keys(localStorage)) {
+      if (key.startsWith("custom-facet-")) localStorage.removeItem(key);
+    }
+  }, []);
 
   useEffect(() => {
     localStorage.setItem("view-mode", view);
   }, [view]);
 
-  const load = useCallback(async () => {
-    setLoading(true);
+  const load = useCallback(async (opts?: { silent?: boolean }) => {
+    const silent = opts?.silent ?? false;
+    if (silent && mainRef.current) {
+      restoreScrollRef.current = scrollContainer(mainRef.current)?.scrollTop ?? 0;
+    } else if (!silent && mainRef.current) {
+      const el = scrollContainer(mainRef.current);
+      if (el) el.scrollTop = 0;
+    }
+    if (!silent) setLoading(true);
     try {
       const [facetData, listData] = await Promise.all([
         fetchFacets(),
         fetchRecords(buildParams(filters)),
       ]);
       setFacets(facetData);
-      setRecords(listData.items);
+      setRecords(listData.items.map(normalizeRecord));
       setTotal(listData.total);
     } catch (e) {
       showToast(e instanceof Error ? e.message : "Failed to load", "error");
     } finally {
-      setLoading(false);
+      if (!silent) setLoading(false);
     }
   }, [filters]);
 
   useEffect(() => {
-    load();
-  }, [load, refreshKey]);
+    void load();
+  }, [load]);
+
+  useEffect(() => {
+    if (refreshKey === 0) return;
+    void load({ silent: true });
+  }, [refreshKey, load]);
+
+  useLayoutEffect(() => {
+    if (restoreScrollRef.current === null || !mainRef.current) return;
+    const el = scrollContainer(mainRef.current);
+    if (el) el.scrollTop = restoreScrollRef.current;
+    restoreScrollRef.current = null;
+  }, [records]);
 
   useEffect(() => {
     localStorage.setItem("sort-keys", JSON.stringify(filters.sortKeys));
@@ -174,36 +214,17 @@ export default function App() {
     }
   };
 
-  const handleCoversFolder = async () => {
+  const handleSourceFolder = async () => {
     try {
-      const r = await browseCoversFolder();
+      const r = await browseSourceFolder();
       if (r.selected) {
-        showToast("Covers folder updated", "success");
+        showToast("Source folder updated", "success");
         setRefreshKey((k) => k + 1);
-      }
-    } catch (e) {
-      showToast(e instanceof Error ? e.message : "Could not open folder picker", "error");
-    }
-  };
-
-  const handleAnimationsFolder = async () => {
-    try {
-      const r = await browseAnimationsFolder();
-      if (r.selected) {
-        showToast("Animations folder updated", "success");
-        setRefreshKey((k) => k + 1);
-      }
-    } catch (e) {
-      showToast(e instanceof Error ? e.message : "Could not open folder picker", "error");
-    }
-  };
-
-  const handleAutographsFolder = async () => {
-    try {
-      const r = await browseAutographsFolder();
-      if (r.selected) {
-        showToast("Autographs folder updated", "success");
-        setRefreshKey((k) => k + 1);
+      } else if (r.missing_subfolders?.length) {
+        showToast(
+          `Missing subfolders: ${r.missing_subfolders.join(", ")}`,
+          "error"
+        );
       }
     } catch (e) {
       showToast(e instanceof Error ? e.message : "Could not open folder picker", "error");
@@ -215,11 +236,13 @@ export default function App() {
       <header className="header">
         <button
           type="button"
-          className="btn btn-ghost sidebar-toggle"
+          className={`btn btn-ghost sidebar-toggle${sidebarOpen ? " is-active" : ""}`}
           onClick={toggleSidebar}
           title={sidebarOpen ? "Hide filters" : "Show filters"}
+          aria-label={sidebarOpen ? "Hide filters" : "Show filters"}
+          aria-pressed={sidebarOpen}
         >
-          {sidebarOpen ? "◀" : "▶"}
+          <FiltersToggleIcon />
         </button>
         <div className="brand">
           <AppIcon size={26} />
@@ -248,9 +271,7 @@ export default function App() {
             sortKeys={filters.sortKeys}
             onSortChange={(sortKeys) => setFilters((f) => ({ ...f, sortKeys }))}
             onThemeToggle={() => setTheme((t) => (t === "dark" ? "light" : "dark"))}
-            onCoversFolder={handleCoversFolder}
-            onAnimationsFolder={handleAnimationsFolder}
-            onAutographsFolder={handleAutographsFolder}
+            onSourceFolder={handleSourceFolder}
             onImport={handleImport}
             onAddRecord={() => {
               setSelected(null);
@@ -278,7 +299,7 @@ export default function App() {
             />
           </>
         )}
-        <main className="main">
+        <main className={`main ${view === "list" ? "main--list" : ""}`} ref={mainRef}>
           {activeChips.length > 0 && (
             <div className="chips">
               {activeChips.map((c) => (
@@ -300,6 +321,8 @@ export default function App() {
                 setSelected(r);
                 setIsNew(false);
               }}
+              onRefresh={() => setRefreshKey((k) => k + 1)}
+              onToast={showToast}
             />
           ) : (
             <RecordGrid
